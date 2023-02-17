@@ -8,9 +8,10 @@ def Aitken_tranform(items: list, steps=-1) -> list:
         acel = []
 
         for i in range(0, len(items) - 2):
-            acel.append((items[i] * items[i+2] - items[i+1]**2) / (items[i+2] - 2* items[i+1] + items[i]))
+            acel.append((items[i] * items[i+2] - items[i+1]**2) / \
+                (items[i+2] - 2* items[i+1] + items[i]))
 
-        print(acel)
+        #print(acel) # checking
 
         items = acel
 
@@ -21,4 +22,5 @@ def Aitken_tranform(items: list, steps=-1) -> list:
 
 
 if __name__ == "__main__":
-    print(Aitken_tranform([1/1, 5/4, 49/36]))
+    # serie = [1/1, 5/4, 49/36, 205/144, 5269/3600, 5369/3600, 266681/176400]
+    print(Aitken_tranform([1/1, 5/4, 49/36, 205/144, 5269/3600, 5369/3600, 266681/176400]))

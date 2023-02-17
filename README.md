@@ -1,1 +1,1 @@
-# acceleration_algorithms
+# Acceleration algorithms
