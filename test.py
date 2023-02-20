@@ -1,5 +1,5 @@
 import math
-from acceleration import Aitken_tranform
+from acceleration import Aitken_tranform, Richardson_transform
 
 def square_serie(n: int) -> list:
     serie = [0]
@@ -12,8 +12,8 @@ def square_serie(n: int) -> list:
 if __name__ == "__main__":
     for i in range(1, 6):
         initial_serie = abs(math.pi**2 / 6 - square_serie(10**i)[-1])
-        acceration_serie = abs(math.pi**2 / 6 - Aitken_tranform(square_serie(10**i)))
+        acceration_serie = abs(math.pi**2 / 6 - Richardson_transform(square_serie(10**i))[-1])
 
-        print(f"Initial serie with n={10**i}: {initial_serie}")
-        print(f"Acceleration serie with n={10**i}: {acceration_serie}")
+        print(f"Error in initial serie with n={10**i}: {initial_serie}")
+        print(f"Errro in acceleration serie with n={10**i}: {acceration_serie}")
         print("\n")
