@@ -1,5 +1,5 @@
 import math
-from main import Aitken_tranform
+from acceleration import Aitken_tranform
 
 def square_serie(n: int) -> list:
     # approx to math.pi**2 / 6

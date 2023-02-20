@@ -22,5 +22,5 @@ def Aitken_tranform(items: list, steps=-1) -> list:
 
 
 if __name__ == "__main__":
-    # serie = [1/1, 5/4, 49/36, 205/144, 5269/3600, 5369/3600, 266681/176400]
-    print(Aitken_tranform([1/1, 5/4, 49/36, 205/144, 5269/3600, 5369/3600, 266681/176400]))
+    
+    print("Hello")
