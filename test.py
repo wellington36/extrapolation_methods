@@ -2,8 +2,6 @@ import math
 from acceleration import Aitken_tranform
 
 def square_serie(n: int) -> list:
-    # approx to math.pi**2 / 6
-
     serie = [0]
 
     for i in range(1, n):
@@ -12,5 +10,10 @@ def square_serie(n: int) -> list:
     return serie
 
 if __name__ == "__main__":
-    print(abs(math.pi**2 / 6 - square_serie(10000)[-1]))
-    print(abs(math.pi**2 / 6 - Aitken_tranform(square_serie(10000))))
+    for i in range(1, 6):
+        initial_serie = abs(math.pi**2 / 6 - square_serie(10**i)[-1])
+        acceration_serie = abs(math.pi**2 / 6 - Aitken_tranform(square_serie(10**i)))
+
+        print(f"Initial serie with n={10**i}: {initial_serie}")
+        print(f"Acceleration serie with n={10**i}: {acceration_serie}")
+        print("\n")
