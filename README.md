@@ -23,5 +23,5 @@ def square_serie(n: int) -> list:
     return serie
 
 # create a new serie with the 100 first terms using Aitken acceleration
-Aitken_tranform(square_serie(100))
+accelerated_serie = Aitken_tranform(square_serie(100))
 ```
