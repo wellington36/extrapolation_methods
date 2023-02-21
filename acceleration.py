@@ -53,6 +53,12 @@ def Epsilon_transfom(items: list, steps=-1) -> list:
     
     return acel
 
+
+def G_transform(items: list, steps=-1) -> list:
+    pass
+
+
+
 if __name__ == "__main__":
     
     print("Hello")
