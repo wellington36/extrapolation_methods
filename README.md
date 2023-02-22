@@ -2,9 +2,10 @@
 
 This repository contains implementations of the following series transformations:
 
-* [Aitken's transform (or delta-squared process)](https://en.wikipedia.org/wiki/Aitken%27s_delta-squared_process)
-* [Richardson's transform (modify)](https://en.wikipedia.org/wiki/Richardson_extrapolation)
+* [Aitken's transformation (or delta-squared process)](https://en.wikipedia.org/wiki/Aitken%27s_delta-squared_process)
+* [Richardson's transformation (modify)](https://en.wikipedia.org/wiki/Richardson_extrapolation)
 * [Epsilon transformation](https://www.sciencedirect.com/science/article/pii/S0377042700003551)
+* [G transformation](https://epubs.siam.org/doi/abs/10.1137/0704032?journalCode=sjnaam)
 
 ## Usage
 
