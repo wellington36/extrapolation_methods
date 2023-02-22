@@ -9,7 +9,7 @@ This repository contains implementations of the following series transformations
 
 ## Usage
 
-In `acceleration` we have functions that receive a list of the values of the series to be accelerated along with the number of steps (this being a positive integer or -1 if you want to do the process until you can't do it anymore). Returning the new series in the form of a list. For example:
+In `acceleration.py` we have functions that receive a list of the values of the series to be accelerated along with the number of steps (this being a positive integer or -1 if you want to do the process until you can't do it anymore). Returning the new series in the form of a list. For example:
 
 ```python
 from acceleration import Aitken_tranform
