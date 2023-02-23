@@ -35,6 +35,7 @@ def Richardson_transform(items: list, p=1, steps=-1) -> list:
     return acel
 
 def Epsilon_transfom(items: list, steps=-1) -> list:
+    # Initial values
     aux = [0 for _ in range(len(items)+1)]
     acel = items
 
@@ -55,6 +56,7 @@ def Epsilon_transfom(items: list, steps=-1) -> list:
 
 
 def G_transform(items: list, steps=-1) -> list:
+    # Initial values
     aux1 = [1 for _ in range(len(items))]
     aux2 = [items[0]] + [items[i+1] - items[i]  for i in range(len(items)-1)]
     acel = items
