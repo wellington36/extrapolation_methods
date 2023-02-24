@@ -16,9 +16,9 @@ from acceleration import Aitken_tranform
 
 # a zeta(2) series
 def square_series(n: int) -> list:
-    series = [0]
+    series = [1.0]
 
-    for i in range(1, n):
+    for i in range(2, n+1):
         series.append(series[-1] + 1/(i)**2)
     
     return series
