@@ -14,15 +14,15 @@ In `acceleration.py` we have functions that receive a list of the values of the 
 ```python
 from acceleration import Aitken_tranform
 
-# a zeta(2) serie
-def square_serie(n: int) -> list:
-    serie = [0]
+# a zeta(2) series
+def square_series(n: int) -> list:
+    series = [0]
 
     for i in range(1, n):
-        serie.append(serie[-1] + 1/(i)**2)
+        series.append(series[-1] + 1/(i)**2)
     
-    return serie
+    return series
 
-# create a new serie with the 100 first terms using Aitken acceleration
-accelerated_serie = Aitken_tranform(square_serie(100))
+# create a new series with the 100 first terms using Aitken acceleration
+accelerated_series = Aitken_tranform(square_series(100))
 ```
