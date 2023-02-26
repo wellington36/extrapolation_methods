@@ -85,32 +85,6 @@ def G_transform(items: np.ndarray, steps=-1) -> np.ndarray:
     
     return acel
 
-#def G_transform(items: list, steps=-1) -> list:
-#    # Initial values
-#    aux1 = [1 for _ in range(len(items))]
-#    aux2 = [items[0]] + [items[i+1] - items[i]  for i in range(len(items)-1)]
-#    acel = items
-#
-#    if steps == -1:
-#        steps = len(items) - 1
-#
-#    for _ in range(steps):
-#        for i in range(len(aux1) - 2):
-#            aux1[i] = aux1[i+1] * (aux2[i+1] / aux2[i] - 1)
-#        aux1 = aux1[:-1]
-#
-#        for i in range(len(aux2) - 2):
-#            aux2[i] = aux2[i+1] * (aux1[i+1] / aux1[i] - 1)
-#        aux2 = aux2[:-1]
-#
-#
-#        print(f"{len(aux1)},  {len(aux2)}, {len(acel)}")
-#        for i in range(len(acel) - 2):
-#            acel[i] = acel[i] - aux2[i] * (acel[i+1] - acel[i])/(aux2[i+1] - aux2[i])
-#        acel = acel[:-1]
-#
-#    return acel
-
 
 if __name__ == "__main__":
     
