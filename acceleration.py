@@ -23,21 +23,37 @@ def Aitken_tranform(items: np.ndarray, steps=-1) -> np.ndarray:
         
     return acel
 
-def Richardson_transform(items: list, p=1, steps=-1) -> list:
+def Richardson_transform(items: np.ndarray, p=1, steps=-1) -> np.ndarray:
     """Receive a p that represents the power of the Richardson transform"""
     if steps == -1:
         steps = int(math.log2(len(items))) - 1
     
     for _ in range(steps):
-        acel = []
+        acel = np.zeros(int(len(items)/2), dtype=DT)
 
         for i in range(0, int(len(items)/2)):
-            acel.append(items[2*i] + (items[2*i] - items[i]) / (2**p - 1))
+            acel[i] = items[2*i] + (items[2*i] - items[i]) / (2**p - 1)
 
         items = acel
         p = p + 1
     
     return acel
+
+#def Richardson_transform(items: list, p=1, steps=-1) -> list:
+#    """Receive a p that represents the power of the Richardson transform"""
+#    if steps == -1:
+#        steps = int(math.log2(len(items))) - 1
+#    
+#    for _ in range(steps):
+#        acel = []
+#
+#        for i in range(0, int(len(items)/2)):
+#            acel.append(items[2*i] + (items[2*i] - items[i]) / (2**p - 1))
+#
+#        items = acel
+#        p = p + 1
+#    
+#    return acel
 
 def Epsilon_transfom(items: list, steps=-1) -> list:
     # Initial values
