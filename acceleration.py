@@ -1,21 +1,26 @@
 import math
+import numpy as np
 
-def Aitken_tranform(items: list, steps=-1) -> list:
+# SET DATA TYPE
+DT = np.dtype('float64') # float 64 bits
+
+
+def Aitken_tranform(items: np.ndarray, steps=-1) -> np.ndarray:
     if steps == -1:
         steps = int((len(items) - 1) / 2)
-
+    
     for _ in range(steps):
-        acel = []
+        acel = np.zeros(len(items) - 2, dtype=DT)
 
         for i in range(0, len(items) - 2):
-            acel.append((items[i] * items[i+2] - items[i+1]**2) / \
-                (items[i+2] - 2* items[i+1] + items[i]))
+            acel[i] = (items[i] * items[i+2] - items[i+1]**2) / \
+                (items[i+2] - 2 * items[i+1] + items[i])
 
         items = acel
 
         if len(acel) < 3:
             return acel
-    
+        
     return acel
 
 def Richardson_transform(items: list, p=1, steps=-1) -> list:
