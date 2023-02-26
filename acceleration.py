@@ -1,42 +1,47 @@
 import math
+import numpy as np
 
-def Aitken_tranform(items: list, steps=-1) -> list:
+# SET DATA TYPE
+DT = np.dtype('float64') # float 64 bits
+
+
+def Aitken_tranform(items: np.ndarray, steps=-1) -> np.ndarray:
     if steps == -1:
         steps = int((len(items) - 1) / 2)
-
+    
     for _ in range(steps):
-        acel = []
+        acel = np.zeros(len(items) - 2, dtype=DT)
 
         for i in range(0, len(items) - 2):
-            acel.append((items[i] * items[i+2] - items[i+1]**2) / \
-                (items[i+2] - 2* items[i+1] + items[i]))
+            acel[i] = (items[i] * items[i+2] - items[i+1]**2) / \
+                (items[i+2] - 2 * items[i+1] + items[i])
 
         items = acel
 
         if len(acel) < 3:
             return acel
-    
+        
     return acel
 
-def Richardson_transform(items: list, p=1, steps=-1) -> list:
+def Richardson_transform(items: np.ndarray, p=1, steps=-1) -> np.ndarray:
     """Receive a p that represents the power of the Richardson transform"""
     if steps == -1:
         steps = int(math.log2(len(items))) - 1
     
     for _ in range(steps):
-        acel = []
+        acel = np.zeros(int(len(items)/2), dtype=DT)
 
         for i in range(0, int(len(items)/2)):
-            acel.append(items[2*i] + (items[2*i] - items[i]) / (2**p - 1))
+            acel[i] = items[2*i] + (items[2*i] - items[i]) / (2**p - 1)
 
         items = acel
         p = p + 1
     
     return acel
 
-def Epsilon_transfom(items: list, steps=-1) -> list:
+def Epsilon_transfom(items: np.ndarray, steps=-1) -> np.ndarray:
     # Initial values
-    aux = [0 for _ in range(len(items)+1)]
+    aux = np.zeros(len(items)+1, dtype=DT)
     acel = items
 
     if steps == -1:
@@ -54,15 +59,16 @@ def Epsilon_transfom(items: list, steps=-1) -> list:
     
     return acel
 
-
-def G_transform(items: list, steps=-1) -> list:
+def G_transform(items: np.ndarray, steps=-1) -> np.ndarray:
     # Initial values
-    aux1 = [1 for _ in range(len(items))]
-    aux2 = [items[0]] + [items[i+1] - items[i]  for i in range(len(items)-1)]
-    acel = items
+    aux1 = np.ones(len(items), dtype=DT)
+    aux2 = np.zeros(len(items), dtype=DT)
 
-    if steps == -1:
-        steps = len(items) - 1
+    aux2[0] = items[0]
+    for i in range(1, len(items)):
+        aux2[i] = items[i] - items[i-1]
+
+    acel = items
 
     for _ in range(steps):
         for i in range(len(aux1) - 2):
@@ -73,12 +79,10 @@ def G_transform(items: list, steps=-1) -> list:
             aux2[i] = aux2[i+1] * (aux1[i+1] / aux1[i] - 1)
         aux2 = aux2[:-1]
 
-
-        print(f"{len(aux1)},  {len(aux2)}, {len(acel)}")
         for i in range(len(acel) - 2):
             acel[i] = acel[i] - aux2[i] * (acel[i+1] - acel[i])/(aux2[i+1] - aux2[i])
         acel = acel[:-1]
-
+    
     return acel
 
 
