@@ -1,9 +1,6 @@
 import math
 import numpy as np
-
-# SET DATA TYPE
-DT = np.dtype('float64') # float 64 bits
-
+from configuration import *
 
 def Aitken_tranform(items: np.ndarray, steps=-1) -> np.ndarray:
     if steps == -1:
