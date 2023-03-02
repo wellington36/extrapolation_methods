@@ -58,14 +58,17 @@ def Epsilon_transfom(items: np.ndarray, steps=-1) -> np.ndarray:
 
 def G_transform(items: np.ndarray, steps=-1) -> np.ndarray:
     # Initial values
-    aux1 = np.ones(len(items), dtype=DT)
+    aux1 = np.ones(len(items) + 1, dtype=DT)
     aux2 = np.zeros(len(items), dtype=DT)
 
     aux2[0] = items[0]
     for i in range(1, len(items)):
         aux2[i] = items[i] - items[i-1]
-
+    
     acel = items
+
+    if steps == -1:
+        steps = len(items) - 1
 
     for _ in range(steps):
         for i in range(len(aux1) - 2):
