@@ -4,7 +4,7 @@ from acceleration import Aitken_tranform, Richardson_transform, Epsilon_transfom
 from configuration import *
 
 def square_series(n: int) -> np.ndarray:
-    """Zeta(2) series, sum of math.pi**2 / 6"""
+    """Zeta(2) series, converges to math.pi**2 / 6"""
     series = np.zeros(n, dtype=DT)
     series[0] = 1.0
 
@@ -13,7 +13,7 @@ def square_series(n: int) -> np.ndarray:
     
     return series
 
-def zeta(n: int, s: float) -> float:
+def zeta(n: int, s: float) -> np.ndarray:
     """Zeta function"""
     series = np.zeros(n, dtype=DT)
     series[0] = 1.0
@@ -22,6 +22,17 @@ def zeta(n: int, s: float) -> float:
         series[i] =  series[i-1] + 1/(i+1)**s
 
     return series
+
+def dirichlet_series(n: int) -> np.ndarray:
+    """Dirichlet series, converges to math.log(2)"""
+    series = np.zeros(n, dtype=DT)
+    series[0] = 1.0
+
+    for i in range(1, n):
+        series[i] =  series[i-1] + (-1)**i * 1/(i+1)
+
+    return series
+
 
 if __name__ == "__main__":
     STEPS = 2
