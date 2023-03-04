@@ -29,7 +29,8 @@ def Richardson_transform(items: np.ndarray, p=1, steps=-1) -> np.ndarray:
         acel = np.zeros(int(len(items)/2), dtype=DT)
 
         for i in range(0, int(len(items)/2)):
-            acel[i] = items[2*i] + (items[2*i] - items[i]) / (2**p - 1)
+            acel[i] = items[2*i] + (items[2*i] - items[i]) / \
+                np.expm1(p * math.log(2))
 
         items = acel
         p = p + 1
