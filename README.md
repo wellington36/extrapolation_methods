@@ -26,11 +26,13 @@ In `acceleration.py` we have functions that receive a list of the values of the 
 from acceleration import Aitken_tranform
 
 # a zeta(2) series
-def square_series(n: int) -> list:
-    series = [1.0]
+def square_series(n: int) -> np.ndarray:
+    """Zeta(2) series, sum of math.pi**2 / 6"""
+    series = np.zeros(n, dtype='float64')
+    series[0] = 1.0
 
-    for i in range(2, n+1):
-        series.append(series[-1] + 1/(i)**2)
+    for i in range(1, n):
+        series[i] =  series[i-1] + 1/(i+1)**2
     
     return series
 
