@@ -2,7 +2,7 @@ import math
 import numpy as np
 from configuration import *
 
-def Aitken_tranform(items: np.ndarray, steps=-1) -> np.ndarray:
+def Aitken_transform(items: np.ndarray, steps=-1) -> np.ndarray:
     if steps == -1:
         steps = int((len(items) - 1) / 2)
     
@@ -20,6 +20,28 @@ def Aitken_tranform(items: np.ndarray, steps=-1) -> np.ndarray:
         
     return acel
 
+def Aitken_transform_m(series, error=1e-5) -> np.ndarray:
+    n = 10
+    acel = np.zeros(n-2, dtype=DT)
+    s = series(n) # series of n elements (np.array)
+
+    for i in range(0, n-2):
+        acel[i] = (s[i] * s[i+2] - s[i+1]**2) / \
+            (s[i+2] - 2 * s[i+1] + s[i])
+    
+    while abs(acel[len(acel)-1] - math.pi**2 / 6) > error:
+        n += 2
+        acel = np.zeros(n-2, dtype=DT)
+        s = series(n) # series of n elements (np.array)
+
+        for i in range(0, n-2):
+            acel[i] = (s[i] * s[i+2] - s[i+1]**2) / \
+                (s[i+2] - 2 * s[i+1] + s[i])
+    
+    print(n)
+    return acel
+
+
 def Richardson_transform(items: np.ndarray, p=1, steps=-1) -> np.ndarray:
     """Receive a p that represents the power of the Richardson transform"""
     if steps == -1:
@@ -35,6 +57,27 @@ def Richardson_transform(items: np.ndarray, p=1, steps=-1) -> np.ndarray:
         items = acel
         p = p + 1
     
+    return acel
+
+def Richardson_transform_m(series, p=1, error=1e-5) -> np.ndarray:
+    n = 4
+    acel = np.zeros(int(n/2), dtype=DT)
+    s = series(n) # series of n elements (np.array)
+
+    for i in range(0, int(n/2)):
+        acel[i] = s[2*i] + (s[2*i] - s[i]) / \
+            np.expm1(p * math.log(2))
+    
+    while abs(acel[-1] - math.pi**2 / 6) > error:
+        n += 2
+        acel = np.zeros(int(n/2), dtype=DT)
+        s = series(n)
+
+        for i in range(0, int(n/2)):
+            acel[i] = s[2*i] + (s[2*i] - s[i]) / \
+                np.expm1(p * math.log(2))
+    
+    print(n)
     return acel
 
 def Epsilon_transfom(items: np.ndarray, steps=-1) -> np.ndarray:

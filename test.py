@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from acceleration import Aitken_tranform, Richardson_transform, Epsilon_transfom, G_transform
+from acceleration import Aitken_transform, Aitken_transform_m, Richardson_transform, Richardson_transform_m, Epsilon_transfom, G_transform
 from configuration import *
 
 def square_series(n: int) -> np.ndarray:
@@ -35,13 +35,15 @@ def dirichlet_series(n: int) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    STEPS = 2
-    N = 10_000
+    STEPS = 1
+    N = 1_000_000
     p = 2
 
     print(math.pi**2 / 6)
     print(zeta(N, p)[-1])
-    print(Aitken_tranform(zeta(N, p), steps=STEPS)[-1])
-    print(Richardson_transform(zeta(N, p), steps=STEPS)[-1])
-    print(Epsilon_transfom(zeta(N, p), steps=-1)[-1])
-    print(G_transform(zeta(N, p), steps=STEPS)[-1])
+    #print(Aitken_transform(zeta(N, p), steps=STEPS)[-1])
+    print(Aitken_transform_m(square_series, error=1e-6)[-1])
+    #print(Richardson_transform(zeta(N, p), steps=STEPS)[-1])
+    #print(Richardson_transform_m(square_series, error=1e-6)[-1])
+    #print(Epsilon_transfom(zeta(N, p), steps=-1)[-1])
+    #print(G_transform(zeta(N, p), steps=STEPS)[-1])
