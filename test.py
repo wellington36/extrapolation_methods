@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from acceleration import Aitken_transform, Richardson_transform, Epsilon_transfom, G_transform
+from acceleration import *
 from configuration import *
 
 def square_series(n: int) -> np.ndarray:
@@ -25,11 +25,11 @@ def dirichlet_series(n: int) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    N = 10_000
+    N = 16_384
 
     print(math.pi**2 / 6)
     print(square_series(N)[-1])
-    print(Aitken_transform(square_series, error=1e-10)[-1])
-    print(Richardson_transform(square_series, error=1e-10)[-1])
-    print(Epsilon_transfom(square_series(N), steps=10)[-1])
-    print(G_transform(square_series(N), steps=10)[-1])
+    #print(Aitken_transform(square_series, error=1e-10)[-1])
+    #print(Richardson_transform(square_series, error=1e-5)[-1])
+    #print(Epsilon_transform(square_series, error=1e-5)[-1])
+    print(G_transform(square_series, error=1e-4)[-1])
