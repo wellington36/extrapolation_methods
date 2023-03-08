@@ -32,6 +32,7 @@ def square_series(n: int) -> np.ndarray:
     
     return series
 
-# create a new series with the 100 first terms using Aitken acceleration
-accelerated_series = Aitken_tranform(square_series(100))
+# Creates a new accelerated series with fewer terms than the original and 
+# such that the difference of the last two terms is less than the error=1e-10:
+accelerated_series = Aitken_tranform(square_series, error=1e-10)
 ```
