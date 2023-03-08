@@ -25,11 +25,11 @@ def dirichlet_series(n: int) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    N = 16_384
+    N = 10_000
 
     print(math.pi**2 / 6)
     print(square_series(N)[-1])
-    #print(Aitken_transform(square_series, error=1e-10)[-1])
-    #print(Richardson_transform(square_series, error=1e-5)[-1])
-    #print(Epsilon_transform(square_series, error=1e-5)[-1])
+    print(Aitken_transform(square_series, error=1e-10)[-1])
+    print(Richardson_transform(square_series, error=1e-5)[-1])
+    print(Epsilon_transform(square_series, error=1e-5)[-1])
     print(G_transform(square_series, error=1e-4)[-1])
