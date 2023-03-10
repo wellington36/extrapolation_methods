@@ -3,12 +3,26 @@ import numpy as np
 from configuration import *
 
 def no_transform(series, error=1e-5) -> np.ndarray:
-    n = 2   # initial value
-    s = series(n)
+    n0 = 2   # initial value
+    s = series(n0)
+    i = -1  # trash value
 
-    while abs(s[-1] - s[-2]) > error:   # stop condition
-        n += 1
+    while abs(s[-1] - math.pi**2/6) > error:   # stop condition
+        i = i + 1
+        n = n0 + 2**i
         s = series(n)
+    
+    n0 = n0 + 2**(i-1)
+
+    while (n > n0):
+        s = series(int((n+n0)/2))
+
+        if abs(s[-1] - math.pi**2/6) > error:
+            n0 = int((n+n0)/2 + 1)
+        else:
+            n = int((n+n0)/2)
+    
+    s = series(n)
     
     print(n)
     return s
@@ -22,7 +36,7 @@ def Aitken_transform(series, error=1e-5) -> np.ndarray:
         acel[i] = (s[i] * s[i+2] - s[i+1]**2) / \
             (s[i+2] - 2 * s[i+1] + s[i])
     
-    while abs(acel[-1] - acel[-2]) > error: # stop condition
+    while abs(acel[-1] - math.pi**2/6) > error: # stop condition
         n += 1
         acel = np.zeros(n-2, dtype=DT)
         s = series(n)
@@ -44,7 +58,7 @@ def Richardson_transform(series, p=1, error=1e-5) -> np.ndarray:
         acel[i] = s[2*i] + (s[2*i] - s[i]) / \
             np.expm1(p * math.log(2))
     
-    while abs(acel[-1] - acel[-2]) > error:   # stop condition
+    while abs(acel[-1] - math.pi**2/6) > error:   # stop condition
         n += 1
         acel = np.zeros(int(n/2), dtype=DT)
         s = series(n)
@@ -62,7 +76,7 @@ def Epsilon_transform(series, error=1e-5) -> np.ndarray:
     acel = s
     aux = np.zeros(n+1, dtype=DT)
 
-    while abs(acel[-1] - acel[-2]) > error:   # stop condition
+    while abs(acel[-1] - math.pi**2/6) > error:   # stop condition
         n += 1
         s = series(n)
         acel = s
@@ -76,7 +90,7 @@ def Epsilon_transform(series, error=1e-5) -> np.ndarray:
             acel[i] = acel[i+1] + 1/(aux[i+1] - aux[i])
         acel = acel[:-2]
     
-    #print(n)
+    print(n)
     return acel
 
 def G_transform(series, error=1e-5):
@@ -90,7 +104,7 @@ def G_transform(series, error=1e-5):
     for i in range(1, n):
         aux2[i] = s[i] - s[i-1]
     
-    while abs(acel[-1] - acel[-2]) > error:   # stop condition
+    while abs(acel[-1] - math.pi**2/6) > error:   # stop condition
         n += 1
         s = series(n)
         acel = s
@@ -114,7 +128,7 @@ def G_transform(series, error=1e-5):
                 (aux2[i+1] - aux2[i])
         acel = acel[:-1]
             
-    #print(n)
+    print(n)
     return acel
 
 
