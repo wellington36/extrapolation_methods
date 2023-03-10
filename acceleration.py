@@ -2,38 +2,50 @@ import math
 import numpy as np
 from configuration import *
 
+def no_transform(series, error=1e-5) -> np.ndarray:
+    n = 2   # initial value
+    s = series(n)
+
+    while abs(s[-1] - s[-2]) > error:   # stop condition
+        n += 1
+        s = series(n)
+    
+    print(n)
+    return s
+
 def Aitken_transform(series, error=1e-5) -> np.ndarray:
     n = 4   # initial value
     acel = np.zeros(n-2, dtype=DT)
-    s = series(n) # series of n elements (np.array)
+    s = series(n)
 
     for i in range(0, n-2):
         acel[i] = (s[i] * s[i+2] - s[i+1]**2) / \
             (s[i+2] - 2 * s[i+1] + s[i])
     
-    while abs(acel[-1] - acel[-2]) > error:
-        n += 1  # step to find the best solution
+    while abs(acel[-1] - acel[-2]) > error: # stop condition
+        n += 1
         acel = np.zeros(n-2, dtype=DT)
-        s = series(n) # series of n elements (np.array)
+        s = series(n)
 
         for i in range(0, n-2):
             acel[i] = (s[i] * s[i+2] - s[i+1]**2) / \
                 (s[i+2] - 2 * s[i+1] + s[i])
     
-    #print(n)
+    print(n)
     return acel
 
 def Richardson_transform(series, p=1, error=1e-5) -> np.ndarray:
+    """Richardson modify with p"""
     n = 4   # initial value
     acel = np.zeros(int(n/2), dtype=DT)
-    s = series(n) # series of n elements (np.array)
+    s = series(n)
 
     for i in range(0, int(n/2)):
         acel[i] = s[2*i] + (s[2*i] - s[i]) / \
             np.expm1(p * math.log(2))
     
-    while abs(acel[-1] - math.pi**2/6) > error:
-        n += 1  # step to find the best solution
+    while abs(acel[-1] - acel[-2]) > error:   # stop condition
+        n += 1
         acel = np.zeros(int(n/2), dtype=DT)
         s = series(n)
 
@@ -41,7 +53,7 @@ def Richardson_transform(series, p=1, error=1e-5) -> np.ndarray:
             acel[i] = s[2*i] + (s[2*i] - s[i]) / \
                 np.expm1(p * math.log(2))
     
-    #print(n)
+    print(n)
     return acel
 
 def Epsilon_transform(series, error=1e-5) -> np.ndarray:
@@ -50,7 +62,7 @@ def Epsilon_transform(series, error=1e-5) -> np.ndarray:
     acel = s
     aux = np.zeros(n+1, dtype=DT)
 
-    while abs(acel[-1] - acel[-2]) > error:
+    while abs(acel[-1] - acel[-2]) > error:   # stop condition
         n += 1
         s = series(n)
         acel = s
@@ -78,7 +90,7 @@ def G_transform(series, error=1e-5):
     for i in range(1, n):
         aux2[i] = s[i] - s[i-1]
     
-    while abs(acel[-1] - math.pi**2/6) > error:
+    while abs(acel[-1] - acel[-2]) > error:   # stop condition
         n += 1
         s = series(n)
         acel = s
