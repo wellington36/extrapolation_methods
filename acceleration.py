@@ -95,7 +95,7 @@ def acceleration(series, transform, error=1e-5) -> np.ndarray:
     acel = transform(series(n0))
     i = -1  # trash
 
-    while abs(acel[-1] - math.pi**2/6) > error:
+    while abs(acel[-1] - z) > error:
         i = i + 1
         n = n0 + 2**i
         acel = transform(series(n))
@@ -105,14 +105,14 @@ def acceleration(series, transform, error=1e-5) -> np.ndarray:
     while (n > n0):
         acel = transform(series(int((n+n0)/2)))
 
-        if abs(acel[-1] - (math.pi**2)/6) > error:
+        if abs(acel[-1] - z) > error:
             n0 = int((n+n0)/2 + 1)
         else:
             n = int((n+n0)/2)
         
     acel = transform(series(n))
 
-    print(n)
+    #print(n)
     return acel
 
 
