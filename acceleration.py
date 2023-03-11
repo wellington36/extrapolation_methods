@@ -2,86 +2,53 @@ import math
 import numpy as np
 from configuration import *
 
-def no_transform(series, error=1e-5) -> np.ndarray:
-    n0 = 2   # initial value
-    s = series(n0)
-    i = -1  # trash value
+def no_transform(items: np.ndarray) -> np.ndarray:
+    return items
 
-    while abs(s[-1] - math.pi**2/6) > error:   # stop condition
-        i = i + 1
-        n = n0 + 2**i
-        s = series(n)
+def Aitken_tranform(items: np.ndarray, steps=1) -> np.ndarray:
+    if steps == -1:
+        steps = int((len(items) - 1) / 2)
     
-    n0 = n0 + 2**(i-1)
+    for _ in range(steps):
+        acel = np.zeros(len(items) - 2, dtype=DT)
 
-    while (n > n0):
-        s = series(int((n+n0)/2))
+        for i in range(0, len(items) - 2):
+            acel[i] = (items[i] * items[i+2] - items[i+1]**2) / \
+                (items[i+2] - 2 * items[i+1] + items[i])
 
-        if abs(s[-1] - math.pi**2/6) > error:
-            n0 = int((n+n0)/2 + 1)
-        else:
-            n = int((n+n0)/2)
+        items = acel
+
+        if len(acel) < 3:
+            return acel
     
-    s = series(n)
-    
-    print(n)
-    return s
-
-def Aitken_transform(series, error=1e-5) -> np.ndarray:
-    n = 4   # initial value
-    acel = np.zeros(n-2, dtype=DT)
-    s = series(n)
-
-    for i in range(0, n-2):
-        acel[i] = (s[i] * s[i+2] - s[i+1]**2) / \
-            (s[i+2] - 2 * s[i+1] + s[i])
-    
-    while abs(acel[-1] - math.pi**2/6) > error: # stop condition
-        n += 1
-        acel = np.zeros(n-2, dtype=DT)
-        s = series(n)
-
-        for i in range(0, n-2):
-            acel[i] = (s[i] * s[i+2] - s[i+1]**2) / \
-                (s[i+2] - 2 * s[i+1] + s[i])
-    
-    print(n)
     return acel
 
-def Richardson_transform(series, p=1, error=1e-5) -> np.ndarray:
-    """Richardson modify with p"""
-    n = 4   # initial value
-    acel = np.zeros(int(n/2), dtype=DT)
-    s = series(n)
-
-    for i in range(0, int(n/2)):
-        acel[i] = s[2*i] + (s[2*i] - s[i]) / \
-            np.expm1(p * math.log(2))
+def Richardson_transform(items: np.ndarray, p=1, steps=1) -> np.ndarray:
+    """Receive a p that represents the power of the Richardson transform"""
+    if steps == -1:
+        steps = int(math.log2(len(items))) - 1
     
-    while abs(acel[-1] - math.pi**2/6) > error:   # stop condition
-        n += 1
-        acel = np.zeros(int(n/2), dtype=DT)
-        s = series(n)
+    for _ in range(steps):
+        acel = np.zeros(int(len(items)/2), dtype=DT)
 
-        for i in range(0, int(n/2)):
-            acel[i] = s[2*i] + (s[2*i] - s[i]) / \
+        for i in range(0, int(len(items)/2)):
+            acel[i] = items[2*i] + (items[2*i] - items[i]) / \
                 np.expm1(p * math.log(2))
+
+        items = acel
+        p = p + 1
     
-    print(n)
     return acel
 
-def Epsilon_transform(series, error=1e-5) -> np.ndarray:
-    n = 4   # initial value
-    s = series(n)
-    acel = s
-    aux = np.zeros(n+1, dtype=DT)
+def Epsilon_transfom(items: np.ndarray, steps=1) -> np.ndarray:
+    # Initial values
+    aux = np.zeros(len(items)+1, dtype=DT)
+    acel = items
 
-    while abs(acel[-1] - math.pi**2/6) > error:   # stop condition
-        n += 1
-        s = series(n)
-        acel = s
-        aux = np.zeros(n + 1, dtype=DT)
+    if steps == -1:
+        steps = int(len(items) / 2) - 1
 
+    for _ in range(steps):
         for i in range(0, len(aux) - 3):
             aux[i] = acel[i+1] + 1/(acel[i+1] - acel[i])
         aux = aux[:-2]
@@ -89,32 +56,25 @@ def Epsilon_transform(series, error=1e-5) -> np.ndarray:
         for i in range(0, len(acel) - 3):
             acel[i] = acel[i+1] + 1/(aux[i+1] - aux[i])
         acel = acel[:-2]
+        
     
-    print(n)
     return acel
 
-def G_transform(series, error=1e-5):
-    n = 4   # initial value
-    s = series(n)
-    acel = s
-    aux1 = np.ones(n + 1, dtype=DT)
-    aux2 = np.zeros(n, dtype=DT)
+def G_transform(items: np.ndarray, steps=1) -> np.ndarray:
+    # Initial values
+    aux1 = np.ones(len(items) + 1, dtype=DT)
+    aux2 = np.zeros(len(items), dtype=DT)
 
-    aux2[0] = s[0]
-    for i in range(1, n):
-        aux2[i] = s[i] - s[i-1]
+    aux2[0] = items[0]
+    for i in range(1, len(items)):
+        aux2[i] = items[i] - items[i-1]
     
-    while abs(acel[-1] - math.pi**2/6) > error:   # stop condition
-        n += 1
-        s = series(n)
-        acel = s
-        aux1 = np.ones(n + 1, dtype=DT)
-        aux2 = np.zeros(n, dtype=DT)
+    acel = items
 
-        aux2[0] = s[0]
-        for i in range(1, n):
-            aux2[i] = s[i] - s[i-1]
-        
+    if steps == -1:
+        steps = len(items) - 1
+
+    for _ in range(steps):
         for i in range(len(aux1) - 2):
             aux1[i] = aux1[i+1] * (aux2[i+1] / aux2[i] - 1)
         aux1 = aux1[:-1]
@@ -124,10 +84,34 @@ def G_transform(series, error=1e-5):
         aux2 = aux2[:-1]
 
         for i in range(len(acel) - 2):
-            acel[i] = acel[i] - aux2[i] * (acel[i+1] - acel[i]) / \
-                (aux2[i+1] - aux2[i])
+            acel[i] = acel[i] - aux2[i] * (acel[i+1] - acel[i])/(aux2[i+1] - aux2[i])
         acel = acel[:-1]
-            
+    
+    return acel
+
+
+def acceleration(series, transform, error=1e-5) -> np.ndarray:
+    n0 = 4
+    acel = transform(series(n0))
+    i = -1  # trash
+
+    while abs(acel[-1] - math.pi**2/6) > error:
+        i = i + 1
+        n = n0 + 2**i
+        acel = transform(series(n))
+    
+    n0 = n0 + 2**(i-1)
+
+    while (n > n0):
+        acel = transform(series(int((n+n0)/2)))
+
+        if abs(acel[-1] - (math.pi**2)/6) > error:
+            n0 = int((n+n0)/2 + 1)
+        else:
+            n = int((n+n0)/2)
+        
+    acel = transform(series(n))
+
     print(n)
     return acel
 

@@ -25,12 +25,13 @@ def dirichlet_series(n: int) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    e = 0.01229482
+    e = 1e-5
 
     print(math.pi**2 / 6)
-    #print(abs(square_series(999)[-1] - math.pi**2 / 6) < e)
-    print(no_transform(square_series, error=e)[-1])
-    #print(Aitken_transform(square_series, error=e)[-1])
-    #print(Richardson_transform(square_series, error=e)[-1])
-    #print(Epsilon_transform(square_series, error=e)[-1])
-    #print(G_transform(square_series, error=e)[-1])
+    print(acceleration(square_series, no_transform, e)[-1])
+    print(acceleration(square_series, Aitken_tranform, e)[-1])
+    print(acceleration(square_series, Richardson_transform, e)[-1])
+    print(acceleration(square_series, Epsilon_transfom, e)[-1])
+    print(acceleration(square_series, G_transform, e)[-1])
+
+    #print(abs(no_transform(square_series(99))[-1] - math.pi**2/6) < e)
