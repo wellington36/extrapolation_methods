@@ -2,12 +2,11 @@ import math
 import numpy as np
 from configuration import *
 
-def no_transform(items: np.ndarray) -> np.ndarray:
+def no_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
     return items
 
-def Aitken_tranform(items: np.ndarray, steps=1) -> np.ndarray:
-    if steps == -1:
-        steps = int((len(items) - 1) / 2)
+def Aitken_tranform(items: np.ndarray, max_steps=10) -> np.ndarray:
+    steps = min(int((len(items) - 1) / 2), max_steps)
     
     for _ in range(steps):
         acel = np.zeros(len(items) - 2, dtype=DT)
@@ -23,10 +22,9 @@ def Aitken_tranform(items: np.ndarray, steps=1) -> np.ndarray:
     
     return acel
 
-def Richardson_transform(items: np.ndarray, p=1, steps=1) -> np.ndarray:
+def Richardson_transform(items: np.ndarray, p=1, max_steps=10) -> np.ndarray:
     """Receive a p that represents the power of the Richardson transform"""
-    if steps == -1:
-        steps = int(math.log2(len(items))) - 1
+    steps = min(int(math.log2(len(items))) - 1, max_steps)
     
     for _ in range(steps):
         acel = np.zeros(int(len(items)/2), dtype=DT)
@@ -40,13 +38,12 @@ def Richardson_transform(items: np.ndarray, p=1, steps=1) -> np.ndarray:
     
     return acel
 
-def Epsilon_transfom(items: np.ndarray, steps=1) -> np.ndarray:
+def Epsilon_transfom(items: np.ndarray, max_steps=10) -> np.ndarray:
     # Initial values
     aux = np.zeros(len(items)+1, dtype=DT)
     acel = items
-
-    if steps == -1:
-        steps = int(len(items) / 2) - 1
+    
+    steps = min(int(len(items) / 2) - 1, max_steps)
 
     for _ in range(steps):
         for i in range(0, len(aux) - 3):
@@ -56,11 +53,10 @@ def Epsilon_transfom(items: np.ndarray, steps=1) -> np.ndarray:
         for i in range(0, len(acel) - 3):
             acel[i] = acel[i+1] + 1/(aux[i+1] - aux[i])
         acel = acel[:-2]
-        
     
     return acel
 
-def G_transform(items: np.ndarray, steps=1) -> np.ndarray:
+def G_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
     # Initial values
     aux1 = np.ones(len(items) + 1, dtype=DT)
     aux2 = np.zeros(len(items), dtype=DT)
@@ -71,8 +67,7 @@ def G_transform(items: np.ndarray, steps=1) -> np.ndarray:
     
     acel = items
 
-    if steps == -1:
-        steps = len(items) - 1
+    steps = min(len(items) - 1, max_steps)
 
     for _ in range(steps):
         for i in range(len(aux1) - 2):
@@ -90,29 +85,29 @@ def G_transform(items: np.ndarray, steps=1) -> np.ndarray:
     return acel
 
 
-def acceleration(series, transform, error=1e-5) -> np.ndarray:
-    n0 = 4
+def acceleration(series, transform, error=1e-5, max_steps=10) -> np.ndarray:
+    n0 = 10
     acel = transform(series(n0))
     i = -1  # trash
 
-    while abs(acel[-1] - z) > error:
+    while abs(acel[-1] - math.pi**2/6) > error:
         i = i + 1
         n = n0 + 2**i
-        acel = transform(series(n))
+        acel = transform(series(n), max_steps=max_steps)
     
     n0 = n0 + 2**(i-1)
 
     while (n > n0):
-        acel = transform(series(int((n+n0)/2)))
+        acel = transform(series(int((n+n0)/2)), max_steps=max_steps)
 
-        if abs(acel[-1] - z) > error:
+        if abs(acel[-1] - math.pi**2/6) > error:
             n0 = int((n+n0)/2 + 1)
         else:
             n = int((n+n0)/2)
         
-    acel = transform(series(n))
+    acel = transform(series(n), max_steps=max_steps)
 
-    #print(n)
+    print(n)
     return acel
 
 

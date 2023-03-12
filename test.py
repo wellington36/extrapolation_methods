@@ -35,11 +35,11 @@ def dirichlet_series(n: int) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    e = 0.3
+    e = 1e-3
 
-    print(z)
-    print(acceleration(slow_zeta_series, no_transform, e)[-1])
-    print(acceleration(slow_zeta_series, Aitken_tranform, e)[-1])
-    print(acceleration(slow_zeta_series, Richardson_transform, e)[-1])
-    print(acceleration(slow_zeta_series, Epsilon_transfom, e)[-1])
-    print(acceleration(slow_zeta_series, G_transform, e)[-1])
+    print(math.pi**2/6)
+    print(acceleration(square_series, no_transform, e)[-1])
+    print(acceleration(square_series, Aitken_tranform, e)[-1])
+    print(acceleration(square_series, Richardson_transform, e)[-1])
+    print(acceleration(square_series, Epsilon_transfom, e)[-1])
+    print(acceleration(square_series, G_transform, e)[-1])
