@@ -41,5 +41,5 @@ if __name__ == "__main__":
     print(acceleration(square_series, no_transform, e)[-1])
     print(acceleration(square_series, Aitken_tranform, e)[-1])
     print(acceleration(square_series, Richardson_transform, e)[-1])
-    print(acceleration(square_series, Epsilon_transfom, e)[-1])
+    print(acceleration(square_series, Epsilon_transform, e)[-1])
     print(acceleration(square_series, G_transform, e)[-1])

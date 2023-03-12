@@ -38,7 +38,7 @@ def Richardson_transform(items: np.ndarray, p=1, max_steps=10) -> np.ndarray:
     
     return acel
 
-def Epsilon_transfom(items: np.ndarray, max_steps=10) -> np.ndarray:
+def Epsilon_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
     # Initial values
     aux = np.zeros(len(items)+1, dtype=DT)
     acel = items
