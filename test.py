@@ -36,10 +36,11 @@ def dirichlet_series(n: int) -> np.ndarray:
 
 if __name__ == "__main__":
     e = 1e-3
+    max_steps = 3
 
     print(math.pi**2/6)
-    print(acceleration(square_series, no_transform, e)[-1])
-    print(acceleration(square_series, Aitken_tranform, e)[-1])
-    print(acceleration(square_series, Richardson_transform, e)[-1])
-    print(acceleration(square_series, Epsilon_transform, e)[-1])
-    print(acceleration(square_series, G_transform, e)[-1])
+    print(acceleration(square_series, no_transform, e, max_steps=max_steps)[-1])
+    print(acceleration(square_series, Aitken_tranform, e, max_steps=max_steps)[-1])
+    print(acceleration(square_series, Richardson_transform, e, max_steps=max_steps)[-1])
+    print(acceleration(square_series, Epsilon_transform, e, max_steps=max_steps)[-1])
+    print(acceleration(square_series, G_transform, e, max_steps=max_steps)[-1])

@@ -6,7 +6,7 @@ def no_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
     return items
 
 def Aitken_tranform(items: np.ndarray, max_steps=10) -> np.ndarray:
-    steps = min(int((len(items) - 1) / 2), max_steps)
+    steps = min(int((len(items) - 1) / 2) - 1, max_steps)
     
     for _ in range(steps):
         acel = np.zeros(len(items) - 2, dtype=DT)
@@ -24,7 +24,7 @@ def Aitken_tranform(items: np.ndarray, max_steps=10) -> np.ndarray:
 
 def Richardson_transform(items: np.ndarray, p=1, max_steps=10) -> np.ndarray:
     """Receive a p that represents the power of the Richardson transform"""
-    steps = min(int(math.log2(len(items))) - 1, max_steps)
+    steps = min(int(math.log2(len(items))) - 2, max_steps)
     
     for _ in range(steps):
         acel = np.zeros(int(len(items)/2), dtype=DT)
@@ -43,7 +43,7 @@ def Epsilon_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
     aux = np.zeros(len(items)+1, dtype=DT)
     acel = items
     
-    steps = min(int(len(items) / 2) - 1, max_steps)
+    steps = min(int(len(items) / 2) - 2, max_steps)
 
     for _ in range(steps):
         for i in range(0, len(aux) - 3):
@@ -67,7 +67,7 @@ def G_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
     
     acel = items
 
-    steps = min(len(items) - 1, max_steps)
+    steps = min(len(items) - 2, max_steps)
 
     for _ in range(steps):
         for i in range(len(aux1) - 2):
@@ -85,7 +85,7 @@ def G_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
     return acel
 
 
-def acceleration(series, transform, error=1e-5, max_steps=10) -> np.ndarray:
+def acceleration(series, transform, error=1e-5, max_steps=3) -> np.ndarray:
     n0 = 10
     acel = transform(series(n0))
     i = -1  # trash
