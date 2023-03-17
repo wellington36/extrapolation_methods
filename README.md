@@ -20,7 +20,15 @@ This repository contains implementations of the following series transformations
 
 ## Usage
 
-In `acceleration.py` we have the transformations implemented above, and for use we have the `acceleration` function that receives a series (in the form of a function $s: \mathbb{N} \to \mathbb{R}^n$ returning the first n elements of that series), the chosen transformation ("Aitken_tranform", "Richardson_transform", "Epsilon_transform", "G_transform" e "no_transform", the latter being using the initial series without any transformation), the stopping criterion (in case the difference of the last two values of the series are smaller than a given error) and the maximum number of steps the transformation can take. This function finds the smallest n at which, with the transformation, the series error is less than the given error. For example:
+In `acceleration.py` we have the transformations implemented above, and for use have the `acceleration` function, that receives on input:
+
+- *A series*: In the form of a function $s: \mathbb{N} \to \mathbb{R}^n$ returning the first n elements of that series.
+- *The Transformation*: "Aitken_tranform", "Richardson_transform", "Epsilon_transform", "G_transform" and "no_transform", the latter being using the initial series without any transformation.
+- *The stopping criterion*: In case the difference of the last two values of the series are smaller than a given error.
+- *The maximum number of steps*: In general, transformations can be applied multiple times on the same series.
+
+This function find the smallest n at which, with the transformation, the series error is less than the given error. For example:
+
 
 ```python
 from acceleration import *
@@ -38,5 +46,18 @@ def square_series(n: int) -> np.ndarray:
 
 # Creates a new accelerated series with fewer terms than the original and 
 # such that the difference of the last two terms is less than the error=1e-5:
-accelerated_series = acceleration(square_series, Aitken_tranform, error=1e-5, max_steps=2)
+no_accelerated = acceleration(square_series, no_transform, error=1e-5, max_steps=2)
+accelerated = acceleration(square_series, Richardson_transform, error=1e-5, max_steps=2)
+
+# Comparison
+print(f"True value:           {math.pi ** 2 / 6}")
+print(f"Without acceleration: {no_accelerated[-1]}")
+print(f"With acceleration:    {accelerated[-1]}")
+```
+
+Out:
+```
+True value:           1.6449340668482264
+Without acceleration: 1.6417844631526846
+With acceleration:    1.6448860927420919
 ```
