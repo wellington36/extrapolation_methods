@@ -44,8 +44,7 @@ def square_series(n: int) -> np.ndarray:
     
     return series
 
-# Creates a new accelerated series with fewer terms than the original and 
-# such that the difference of the last two terms is less than the error=1e-5:
+# Test with no_transform (without transformation) and with Richardson transformation
 no_accelerated = acceleration(square_series, no_transform, error=1e-5, max_steps=2)
 accelerated = acceleration(square_series, Richardson_transform, error=1e-5, max_steps=2)
 
