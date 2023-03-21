@@ -2,6 +2,7 @@ import math
 import numpy as np
 from acceleration import *
 from configuration import *
+import matplotlib.pyplot as plt
 
 def square_series(n: int) -> np.ndarray:
     """Zeta(2) series, converges to math.pi**2 / 6"""
@@ -33,14 +34,24 @@ def dirichlet_series(n: int) -> np.ndarray:
 
     return series
 
+def slow_series(n: int) -> np.ndarray:
+    series = np.zeros(n, dtype=DT)
+    series[0] = 1/(2*(math.log(2))**2)
+
+    for i in range(1, n):
+        series[i] =  series[i-1] + 1/((i+2)*(math.log(i+2))**2)
+    
+    return series
+
 
 if __name__ == "__main__":
-    e = 1e-3
-    max_steps = 3
+    e = 0.12
+    max_steps = 1
 
-    print(math.pi**2/6)
-    print(acceleration(square_series, no_transform, e, max_steps=max_steps)[-1])
-    print(acceleration(square_series, Aitken_tranform, e, max_steps=max_steps)[-1])
-    print(acceleration(square_series, Richardson_transform, e, max_steps=max_steps)[-1])
-    print(acceleration(square_series, Epsilon_transform, e, max_steps=max_steps)[-1])
-    print(acceleration(square_series, G_transform, e, max_steps=max_steps)[-1])
+    print(constants[3])
+    for i in np.arange(0.13, 0.08, -0.01):
+        print(acceleration(slow_series, no_transform, i, max_steps=max_steps)[-1])
+        print(acceleration(slow_series, Aitken_transform, i, max_steps=max_steps)[-1])
+        print(acceleration(slow_series, Richardson_transform, i, max_steps=max_steps)[-1])
+        print(acceleration(slow_series, Epsilon_transform, i, max_steps=max_steps)[-1])
+        print(acceleration(slow_series, G_transform, i, max_steps=max_steps)[-1])
