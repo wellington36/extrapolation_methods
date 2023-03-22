@@ -43,12 +43,12 @@ def Epsilon_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
     aux = np.zeros(len(items)+1, dtype=DT)
     acel = items
     
-    steps = min(int(len(items) / 3) - 2, max_steps)
+    steps = min(int(len(items) / 3) - 3, max_steps)
 
     for _ in range(steps):
         for i in range(0, len(aux) - 3):
             aux[i] = acel[i+1] + 1/(acel[i+1] - acel[i])
-        aux = aux[:-2]
+        aux = aux[:-3]
 
         for i in range(0, len(acel) - 3):
             acel[i] = acel[i+1] + 1/(aux[i+1] - aux[i])
@@ -108,7 +108,7 @@ def acceleration(series, transform, error=1e-5, max_steps=5) -> np.ndarray:
         
     acel = transform(series(n), max_steps=max_steps)
 
-    print(n)
+    #print(n)
     return acel
 
 

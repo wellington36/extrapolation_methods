@@ -2,7 +2,9 @@ import math
 import numpy as np
 from acceleration import *
 from configuration import *
+
 import matplotlib.pyplot as plt
+import time
 
 def square_series(n: int) -> np.ndarray:
     """Zeta(2) series, converges to math.pi**2 / 6"""
@@ -45,13 +47,22 @@ def slow_series(n: int) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    e = 0.12
+    e = 0.10
     max_steps = 1
 
     print(constants[3])
-    for i in np.arange(0.13, 0.08, -0.01):
-        print(acceleration(slow_series, no_transform, i, max_steps=max_steps)[-1])
-        print(acceleration(slow_series, Aitken_transform, i, max_steps=max_steps)[-1])
-        print(acceleration(slow_series, Richardson_transform, i, max_steps=max_steps)[-1])
-        print(acceleration(slow_series, Epsilon_transform, i, max_steps=max_steps)[-1])
-        print(acceleration(slow_series, G_transform, i, max_steps=max_steps)[-1])
+    for t in [no_transform, Aitken_transform, Richardson_transform, Epsilon_transform, G_transform]:
+        
+        if t in [G_transform]:
+            continue
+        print(f"########## {e} ##########")
+        t0 = time.time()
+        n, acel = acceleration(slow_series, transform=t, error=e, max_steps=max_steps)
+        t1 = time.time()
+
+        print(f"{t.__name__}    |   {t1-t0} |   {acel[-1]}  |   {n}")
+
+        plt.plot(range(len(acel))[30:], acel[30:], label=t.__name__)
+    
+    plt.legend()
+    plt.show()
