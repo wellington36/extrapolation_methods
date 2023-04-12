@@ -3,7 +3,7 @@ import numpy as np
 from configuration import *
 
 def no_transform(items: np.ndarray, max_steps=1) -> np.ndarray:
-    return items
+    return np.log(items, dtype=DT)
 
 def Aitken_transform(items: np.ndarray, max_steps=1) -> np.ndarray:
     steps = min(int((len(items) - 1) / 2) - 1, max_steps)
@@ -12,8 +12,9 @@ def Aitken_transform(items: np.ndarray, max_steps=1) -> np.ndarray:
         acel = np.zeros(len(items) - 2, dtype=DT)
 
         for i in range(0, len(items) - 2):
-            acel[i] = (items[i] * items[i+2] - items[i+1]**2) / \
-                (items[i+2] - 2 * items[i+1] + items[i])
+            t0 = items[i] + (items[i+2] - 2 * items[i+1])
+            
+            acel[i] = np.log(items[i+2] * (items[i])/t0 - items[i+1] * (items[i+1])/t0, dtype=DT)
 
         items = acel
 
@@ -31,7 +32,9 @@ def Richardson_transform(items: np.ndarray, p=1, max_steps=1) -> np.ndarray:
 
         for i in range(0, int(len(items)/2)):
             acel[i] = items[2*i] + (items[2*i] - items[i]) / \
-                np.expm1(p * np.log(2), dtype=DT)
+                np.expm1(p * math.log(2), dtype=DT)
+            
+            acel[i] = np.log(acel[i], dtype=DT)
 
         items = acel
         p = p + 1
@@ -51,7 +54,7 @@ def Epsilon_transform(items: np.ndarray, max_steps=1) -> np.ndarray:
         aux = aux[:-3]
 
         for i in range(0, len(acel) - 3):
-            acel[i] = acel[i+1] + 1/(aux[i+1] - aux[i])
+            acel[i] = np.log(acel[i+1] + 1/(aux[i+1] - aux[i]), dtype=DT)
         acel = acel[:-3]
     
     return acel
@@ -79,7 +82,7 @@ def G_transform(items: np.ndarray, max_steps=1) -> np.ndarray:
         aux2 = aux2[:-1]
 
         for i in range(len(acel) - 2):
-            acel[i] = acel[i] - aux2[i] * (acel[i+1] - acel[i])/(aux2[i+1] - aux2[i])
+            acel[i] = np.log(acel[i] - aux2[i] * (acel[i+1] - acel[i])/(aux2[i+1] - aux2[i]), dtype=DT)
         acel = acel[:-3]
     
     return acel
@@ -91,25 +94,33 @@ def acceleration(series, transform, error=1e-5, max_steps=5) -> np.ndarray:
     acel = transform(series(n0))
     i = -1  # trash
 
-    while abs(acel[-1] - constants[1]**2/6) > error: # check error
+    check = np.array([acel[-1], np.log(constants[1]**2/6, dtype=DT)], dtype=DT)
+    check = np.exp(np.sort(check), dtype=DT)
+
+    while np.sum(np.array([-1, 1]) @ check, dtype=DT) > error: # check error
         i = i + 1
         n = n0 + 2**i
         acel = transform(series(n), max_steps=max_steps)
+
+        check = np.array([acel[-1], np.log(constants[1]**2/6, dtype=DT)], dtype=DT)
+        check = np.exp(np.sort(check), dtype=DT)
     
     n0 = n0 + 2**(i-1)
 
     while (n > n0):
         acel = transform(series(int((n+n0)/2)), max_steps=max_steps)
 
-        if abs(acel[-1] - constants[1]**2/6) > error:    # check error
+        check = np.array([acel[-1], np.log(constants[1]**2/6, dtype=DT)], dtype=DT)
+        check = np.exp(np.sort(check), dtype=DT)
+
+        if np.sum(np.array([-1, 1]) @ check, dtype=DT) > error:    # check error
             n0 = int((n+n0)/2 + 1)
         else:
             n = int((n+n0)/2)
         
     acel = transform(series(n), max_steps=max_steps)
 
-    #print(n)
-    return n, acel
+    return n, np.exp(acel, dtype=DT)
 
 
 if __name__ == "__main__":

@@ -46,7 +46,7 @@ def slow_series(n: int) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    e = 1e-5
+    e = 1e-4
     steps = 1
 
     print(constants[1]**2/6)
@@ -54,6 +54,7 @@ if __name__ == "__main__":
         
         if t in []:
             continue
+
         print(f"########## {e} ##########")
         t0 = time.time()
         n, acel = acceleration(square_series, transform=t, error=e, max_steps=steps)
