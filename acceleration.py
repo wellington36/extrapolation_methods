@@ -2,10 +2,10 @@ import math
 import numpy as np
 from configuration import *
 
-def no_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
+def no_transform(items: np.ndarray, max_steps=1) -> np.ndarray:
     return items
 
-def Aitken_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
+def Aitken_transform(items: np.ndarray, max_steps=1) -> np.ndarray:
     steps = min(int((len(items) - 1) / 2) - 1, max_steps)
     
     for _ in range(steps):
@@ -19,10 +19,10 @@ def Aitken_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
 
         if len(acel) < 3:
             return acel
-    
+
     return acel
 
-def Richardson_transform(items: np.ndarray, p=1, max_steps=10) -> np.ndarray:
+def Richardson_transform(items: np.ndarray, p=1, max_steps=1) -> np.ndarray:
     """Receive a p that represents the power of the Richardson transform"""
     steps = min(int(math.log2(len(items))) - 2, max_steps)
     
@@ -31,14 +31,14 @@ def Richardson_transform(items: np.ndarray, p=1, max_steps=10) -> np.ndarray:
 
         for i in range(0, int(len(items)/2)):
             acel[i] = items[2*i] + (items[2*i] - items[i]) / \
-                np.expm1(p * math.log(2))
+                np.expm1(p * np.log(2), dtype=DT)
 
         items = acel
         p = p + 1
     
     return acel
 
-def Epsilon_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
+def Epsilon_transform(items: np.ndarray, max_steps=1) -> np.ndarray:
     # Initial values
     aux = np.zeros(len(items)+1, dtype=DT)
     acel = items
@@ -56,7 +56,7 @@ def Epsilon_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
     
     return acel
 
-def G_transform(items: np.ndarray, max_steps=10) -> np.ndarray:
+def G_transform(items: np.ndarray, max_steps=1) -> np.ndarray:
     # Initial values
     aux1 = np.ones(len(items) + 1, dtype=DT)
     aux2 = np.zeros(len(items), dtype=DT)
@@ -91,7 +91,7 @@ def acceleration(series, transform, error=1e-5, max_steps=5) -> np.ndarray:
     acel = transform(series(n0))
     i = -1  # trash
 
-    while abs(acel[-1] - acel[-2]) > error: # check error
+    while abs(acel[-1] - constants[1]**2/6) > error: # check error
         i = i + 1
         n = n0 + 2**i
         acel = transform(series(n), max_steps=max_steps)
@@ -101,7 +101,7 @@ def acceleration(series, transform, error=1e-5, max_steps=5) -> np.ndarray:
     while (n > n0):
         acel = transform(series(int((n+n0)/2)), max_steps=max_steps)
 
-        if abs(acel[-1] - acel[-2]) > error:    # check error
+        if abs(acel[-1] - constants[1]**2/6) > error:    # check error
             n0 = int((n+n0)/2 + 1)
         else:
             n = int((n+n0)/2)
@@ -109,7 +109,7 @@ def acceleration(series, transform, error=1e-5, max_steps=5) -> np.ndarray:
     acel = transform(series(n), max_steps=max_steps)
 
     #print(n)
-    return acel
+    return n, acel
 
 
 if __name__ == "__main__":
