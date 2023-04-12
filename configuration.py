@@ -1,7 +1,7 @@
 import numpy as np
 
 # SET DATA TYPE
-DT = np.dtype('float64') # numpy precision
+DT = np.dtype('float128') # numpy precision
 
 # SET zeta(1.2), PI, log 2, limit of slow series VALUE APPROXIMATION (~100)
 Z = 5.591582441177750776536563193423143277629903241802331099473728250024897906802651077991103320801610144

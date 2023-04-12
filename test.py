@@ -2,7 +2,6 @@ import math
 import numpy as np
 from acceleration import *
 from configuration import *
-
 import matplotlib.pyplot as plt
 import time
 
@@ -47,25 +46,31 @@ def slow_series(n: int) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    e = 0.0001
-    max_steps = 2
+    e = 1e-4
+    steps = 1
 
-    print(constants[3])
+    print(constants[1]**2/6)
     for t in [no_transform, Aitken_transform, Richardson_transform, Epsilon_transform, G_transform]:
         
         if t in []:
             continue
+
         print(f"########## {e} ##########")
         t0 = time.time()
-        n, acel = acceleration(square_series, transform=t, error=e, max_steps=max_steps)
-        t1 = time.time()
+        n, acel = acceleration(square_series, transform=t, error=e, max_steps=steps)
+        t1 = time.time() - t0
 
-        print(f"{t.__name__}    |   {t1-t0} |   {acel[-1]}  |   {n}")
+        t0 = time.time()
+        n, acel = acceleration(square_series, transform=t, error=e, max_steps=steps)
+        t2 = time.time() - t0
 
-        plt.plot(range(len(acel))[10:], acel[10:], label=t.__name__)
-    
-    #true_value = constants[3]
-    #plt.plot(range(len(acel))[30:], [true_value for _ in range(len(acel[30:]))], label="True value")
+        t0 = time.time()
+        n, acel = acceleration(square_series, transform=t, error=e, max_steps=steps)
+        t3 = time.time() - t0
+
+        print(f"{t.__name__}    |   {(t1 + t2 + t3) / 3} |   {acel[-1]}  |   {n}")
+
+        plt.plot(range(len(acel))[20:], acel[20:], label=t.__name__)
     
     plt.legend()
     plt.show()
