@@ -94,7 +94,7 @@ def acceleration(series, transform, error=1e-5, max_steps=5) -> np.ndarray:
     acel = transform(series(n0))
     i = -1  # trash
 
-    check = np.array([acel[-1], np.log(constants[1]**2/6, dtype=DT)], dtype=DT)
+    check = np.array([acel[-1], acel[-2]], dtype=DT)
     check = np.exp(np.sort(check), dtype=DT)
 
     while np.sum(np.array([-1, 1]) @ check, dtype=DT) > error: # check error
@@ -102,7 +102,7 @@ def acceleration(series, transform, error=1e-5, max_steps=5) -> np.ndarray:
         n = n0 + 2**i
         acel = transform(series(n), max_steps=max_steps)
 
-        check = np.array([acel[-1], np.log(constants[1]**2/6, dtype=DT)], dtype=DT)
+        check = np.array([acel[-1], acel[-2]], dtype=DT)
         check = np.exp(np.sort(check), dtype=DT)
     
     n0 = n0 + 2**(i-1)
@@ -110,7 +110,7 @@ def acceleration(series, transform, error=1e-5, max_steps=5) -> np.ndarray:
     while (n > n0):
         acel = transform(series(int((n+n0)/2)), max_steps=max_steps)
 
-        check = np.array([acel[-1], np.log(constants[1]**2/6, dtype=DT)], dtype=DT)
+        check = np.array([acel[-1], acel[-2]], dtype=DT)
         check = np.exp(np.sort(check), dtype=DT)
 
         if np.sum(np.array([-1, 1]) @ check, dtype=DT) > error:    # check error
