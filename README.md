@@ -25,7 +25,7 @@ In `acceleration.py` we have the transformations implemented above, and for use 
 - *A series*: In the form of a function $s: \mathbb{N} \to \mathbb{R}^n$ returning the first n elements of that series.
 - *The Transformation*: "Aitken_tranform", "Richardson_transform", "Epsilon_transform", "G_transform" and "no_transform", the latter being using the initial series without any transformation.
 - *The stopping criterion*: In case the difference of the last two values of the series are smaller than a given error.
-- *The maximum number of steps*: In general, transformations can be applied multiple times on the same series.
+- *The maximum number of steps*: In general, transformations can be applied multiple times on the same series (not recommended for accuracy error).
 
 This function find the smallest n at which, with the transformation, the series error is less than the given error. For example:
 
@@ -45,8 +45,8 @@ def square_series(n: int) -> np.ndarray:
     return series
 
 # Test with no_transform (without transformation) and with Richardson transformation
-no_accelerated = acceleration(square_series, no_transform, error=1e-5, max_steps=2)
-accelerated = acceleration(square_series, Richardson_transform, error=1e-5, max_steps=2)
+no_accelerated = acceleration(square_series, no_transform, error=1e-5)
+accelerated = acceleration(square_series, Richardson_transform, error=1e-5)
 
 # Comparison
 print(f"True value:           {math.pi ** 2 / 6}")
