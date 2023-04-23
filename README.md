@@ -56,6 +56,6 @@ print(f"With acceleration:    {accelerated[-1]}, with {n1} iterations")
 Out:
 ```
 True value:           1.6449340668482264
-Without acceleration: 1.6449240668982263, with 100000 iterations
-With acceleration:    1.6449240830478489, with 548 iterations
+Without acceleration: 1.6449240668982263, with 100000 terms
+With acceleration:    1.6449240830478489, with 548 terms
 ```
