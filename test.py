@@ -46,9 +46,9 @@ def slow_series(n: int) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    e = 1e-3
+    e = 0.0001
 
-    print(constants[1]**2/6)
+    print(constants[3])
     for t in [no_transform, Aitken_transform, Richardson_transform, Epsilon_transform, G_transform]:
         
         if t in []:
@@ -56,27 +56,20 @@ if __name__ == "__main__":
 
         print(f"########## {e} ##########")
         t0 = time.time()
-        n, acel = acceleration(square_series, transform=t, error=e)
+        n, acel = acceleration(slow_series, transform=t, error=e)
         t1 = time.time() - t0
 
         t0 = time.time()
-        n, acel = acceleration(square_series, transform=t, error=e)
+        n, acel = acceleration(slow_series, transform=t, error=e)
         t2 = time.time() - t0
 
         t0 = time.time()
-        n, acel = acceleration(square_series, transform=t, error=e)
+        n, acel = acceleration(slow_series, transform=t, error=e)
         t3 = time.time() - t0
 
         print(f"{t.__name__}    |   {(t1 + t2 + t3) / 3} |   {acel[-1]}  |   {n}")
 
         plt.plot(range(len(acel)), acel, label=t.__name__)
     
-    #plt.legend()
-    #plt.show()
-
-    n0, no_accelerated = acceleration(square_series, no_transform, error=1e-5)
-    n1, accelerated = acceleration(square_series, Richardson_transform, error=1e-5)
-
-    print(f"True value:           {math.pi ** 2 / 6}")
-    print(f"Without acceleration: {no_accelerated[-1]}, with {n0} iterations")
-    print(f"With acceleration:    {accelerated[-1]}, with {n1} iterations")
+    plt.legend()
+    plt.show()
