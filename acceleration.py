@@ -2,20 +2,6 @@ import math
 import numpy as np
 from configuration import *
 
-
-###### partial sum ######
-def partial_sum(f, n: int) -> np.ndarray:
-    """Return the partial sum of the series f, up to n terms"""
-    series = np.zeros(n, dtype=DT)
-    series[0] = f(1)
-
-    for i in range(1, n):
-        series[i] = series[i-1] + f(i+1)
-    
-    return series
-
-
-###### extrapolation methods ######
 def no_transform(items: np.ndarray) -> np.ndarray:
     return np.log(items, dtype=DT)
 
@@ -70,11 +56,10 @@ def G_transform(items: np.ndarray) -> np.ndarray:
 
     return acel
 
-###### acceleration ######
 def acceleration(series, transform, error=1e-5) -> np.ndarray:
     n0 = 10
     n = n0
-    acel = transform(partial_sum(series, n0))
+    acel = transform(series(n0))
     i = -1  # trash
 
     check = np.array([acel[-1], np.log(constants[1]**2/6)], dtype=DT)
@@ -83,7 +68,7 @@ def acceleration(series, transform, error=1e-5) -> np.ndarray:
     while np.sum(np.array([-1, 1]) @ check, dtype=DT) > error: # check error
         i = i + 1
         n = n0 + 2**i
-        acel = transform(partial_sum(series, n))
+        acel = transform(series(n))
 
         check = np.array([acel[-1], np.log(constants[1]**2/6)], dtype=DT)
         check = np.exp(np.sort(check), dtype=DT)
@@ -91,7 +76,7 @@ def acceleration(series, transform, error=1e-5) -> np.ndarray:
     n0 = n0 + 2**(i-1)
 
     while (n > n0):
-        acel = transform(partial_sum(series, int((n+n0)/2)))
+        acel = transform(series(int((n+n0)/2)))
 
         check = np.array([acel[-1], np.log(constants[1]**2/6)], dtype=DT)
         check = np.exp(np.sort(check), dtype=DT)
@@ -101,7 +86,7 @@ def acceleration(series, transform, error=1e-5) -> np.ndarray:
         else:
             n = int((n+n0)/2)
         
-    acel = transform(partial_sum(series, n))
+    acel = transform(series(n))
 
     return n, np.exp(acel, dtype=DT)
 
