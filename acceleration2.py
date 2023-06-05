@@ -1,10 +1,10 @@
 from mpmath import mp, mpf, exp, log, expm1, pi, fabs
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 import time
 
 ###### CONSTANTS ######
-mp.prec = 53
+mp.dps = 17
 np_prec = np.dtype('float64') 
 
 ###### TEST SERIES ######
@@ -45,7 +45,7 @@ def partial_sum_numpy(f, n):
     series[0] = f(1)
 
     for i in range(1, n):
-        series[i] =  series[i-1] + f(i+1)
+        series[i] = series[i-1] + f(i+1)
     
     return series
 
@@ -121,10 +121,7 @@ def acceleration_mpmath(series, error=1e-5) -> np.ndarray:
 
 ###### MAIN ######
 if __name__ == "__main__":
-    #n1, acel1 = acceleration_numpy(basel_problem, error=1e-10)
-    #n2, acel2 = acceleration_mpmath(basel_problem, error=1e-10)
-
-    e = 1e-10
+    e = 1e-8
 
     for t in [acceleration_numpy, acceleration_mpmath]:
         
@@ -146,7 +143,7 @@ if __name__ == "__main__":
 
         print(f"{t.__name__}    |   {(t1 + t2 + t3) / 3} |   {acel[-1]}  |   {n}")
 
-        plt.plot(range(len(acel)), acel, label=t.__name__)
+        #plt.plot(range(len(acel)), acel, label=t.__name__)
     
-    plt.legend()
-    plt.show()
+    #plt.legend()
+    #plt.show()
