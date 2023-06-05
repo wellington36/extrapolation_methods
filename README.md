@@ -26,14 +26,14 @@ In `acceleration.py` we have the transformations implemented above, and for use 
 - *The Transformation*: "Aitken_tranform", "Richardson_transform", "Epsilon_transform", "G_transform" and "no_transform", the latter being using the initial series without any transformation.
 - *The stopping criterion*: In case the difference of the last two values of the series are smaller than a given error.
 
-This function find the smallest n at which, with the transformation, the series error is less than the given error. For example:
+This function determines the minimum value of n for which, when applying the transformation, the difference between the last partial sums becomes smaller than the specified error. For example:
 
 
 ```python
 from acceleration import *
 import math
 
-# Test with no_transform (without transformation) and with Richardson transformation
+# Test with no_transform (without transformation) and with Richardson transformation the basel problem
 n0, no_accelerated = acceleration(lambda x: 1/x**2, no_transform, error=1e-12)
 n1, accelerated = acceleration(lambda x: 1/x**2, Richardson_transform, error=1e-12)
 
