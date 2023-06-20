@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - mpmath
   pull_request:
     branches:
       - main

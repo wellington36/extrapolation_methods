@@ -6,4 +6,3 @@
 # python scripts
 test_scripts/*
 test.py
-acceleration/emsum.py
