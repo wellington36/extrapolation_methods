@@ -4,7 +4,7 @@ from acceleration.configuration import *
 
 
 ###### partial sum ######
-def partial_sum(f, n: int) -> np.ndarray:
+def partial_sum_np(f, n: int) -> np.ndarray:
     """Return the partial sum of the series f, up to n terms"""
     series = np.zeros(n, dtype=DT)
     series[0] = f(1)
@@ -16,10 +16,10 @@ def partial_sum(f, n: int) -> np.ndarray:
 
 
 ###### extrapolation methods ######
-def no_transform(items: np.ndarray) -> np.ndarray:
+def no_transform_np(items: np.ndarray) -> np.ndarray:
     return np.log(items, dtype=DT)
 
-def Aitken_transform(items: np.ndarray) -> np.ndarray:
+def Aitken_transform_np(items: np.ndarray) -> np.ndarray:
     acel = np.zeros(items.shape[0] - 2, dtype=DT)
 
     for i in range(items.shape[0] - 2):
@@ -29,7 +29,7 @@ def Aitken_transform(items: np.ndarray) -> np.ndarray:
     
     return acel
 
-def Richardson_transform(item: np.ndarray, p: int = 1) -> np.ndarray:
+def Richardson_transform_np(item: np.ndarray, p: int = 1) -> np.ndarray:
     """Receive a p that represents the power of the Richardson transform"""
     acel = np.zeros(int(item.shape[0]/2), dtype=DT)
 
@@ -41,7 +41,7 @@ def Richardson_transform(item: np.ndarray, p: int = 1) -> np.ndarray:
     
     return acel
 
-def Epsilon_transform(items: np.ndarray) -> np.ndarray:
+def Epsilon_transform_np(items: np.ndarray) -> np.ndarray:
     acel = np.zeros(items.shape[0] - 2, dtype=DT)
 
     for i in range(items.shape[0] - 2):
@@ -49,7 +49,7 @@ def Epsilon_transform(items: np.ndarray) -> np.ndarray:
 
     return acel
 
-def G_transform(items: np.ndarray) -> np.ndarray:
+def G_transform_np(items: np.ndarray) -> np.ndarray:
     # Initial values
     aux = np.zeros(items.shape[0], dtype=DT)
     acel = np.zeros(items.shape[0] - 3, dtype=DT)
@@ -74,26 +74,26 @@ def G_transform(items: np.ndarray) -> np.ndarray:
 def esum(series, transform, error=1e-5) -> np.ndarray:
     n0 = 10
     n = n0
-    acel = transform(partial_sum(series, n0))
+    acel = transform(partial_sum_np(series, n0))
     i = -1  # trash
 
-    check = np.array([acel[-1], np.log(constants[1]**2/6)], dtype=DT)
+    check = np.array([acel[-1], acel[-2]], dtype=DT)
     check = np.exp(np.sort(check), dtype=DT)
 
     while np.sum(np.array([-1, 1]) @ check, dtype=DT) > error: # check error
         i = i + 1
         n = n0 + 2**i
-        acel = transform(partial_sum(series, n))
+        acel = transform(partial_sum_np(series, n))
 
-        check = np.array([acel[-1], np.log(constants[1]**2/6)], dtype=DT)
+        check = np.array([acel[-1], acel[-2]], dtype=DT)
         check = np.exp(np.sort(check), dtype=DT)
     
     n0 = n0 + 2**(i-1)
 
     while (n > n0):
-        acel = transform(partial_sum(series, int((n+n0)/2)))
+        acel = transform(partial_sum_np(series, int((n+n0)/2)))
 
-        check = np.array([acel[-1], np.log(constants[1]**2/6)], dtype=DT)
+        check = np.array([acel[-1], acel[-2]], dtype=DT)
         check = np.exp(np.sort(check), dtype=DT)
 
         if np.sum(np.array([-1, 1]) @ check, dtype=DT) > error:    # check error
@@ -101,7 +101,7 @@ def esum(series, transform, error=1e-5) -> np.ndarray:
         else:
             n = int((n+n0)/2)
         
-    acel = transform(partial_sum(series, n))
+    acel = transform(partial_sum_np(series, n))
 
     return n, np.exp(acel, dtype=DT)
 
