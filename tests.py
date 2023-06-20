@@ -1,4 +1,4 @@
-from src.acceleration import acceleration, no_transform, Richardson_transform, Aitken_transform, Epsilon_transform, G_transform, partial_sum
+from acceleration.esum import esum, no_transform, Richardson_transform, Aitken_transform, Epsilon_transform, G_transform, partial_sum
 import numpy as np
 
 def basel_series(n: int):
@@ -27,12 +27,12 @@ def test_len_transformations():
     assert len(G_transform(partial_sum(basel_series, 10))) == 7
 
 def test_simple_acceleration():
-    n, acel = acceleration(basel_series, no_transform, 0.1)
+    n, acel = esum(basel_series, no_transform, 0.1)
     assert type(n) == int
     assert type(acel) == np.ndarray
     assert len(acel) == 10
 
-    n, acel = acceleration(basel_series, no_transform, 0.01)
+    n, acel = esum(basel_series, no_transform, 0.01)
     assert type(n) == int
     assert type(acel) == np.ndarray
     assert len(acel) == 100
