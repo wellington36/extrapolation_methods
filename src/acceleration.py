@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from configuration import *
+from src.configuration import *
 
 
 ###### partial sum ######

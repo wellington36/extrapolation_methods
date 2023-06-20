@@ -1,7 +1,7 @@
 import math
 import numpy as np
-from acceleration import *
-from configuration import *
+from src.acceleration import *
+from src.configuration import *
 import matplotlib.pyplot as plt
 import time
 
