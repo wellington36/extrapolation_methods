@@ -4,7 +4,6 @@
 /.pytest_cache/
 
 # python scripts
-test.ipynb
 test_scripts/*
-test_github.py
 test.py
+acceleration/emsum.py

@@ -70,7 +70,7 @@ def G_transform(items: np.ndarray) -> np.ndarray:
 
     return acel
 
-###### acceleration ######
+###### summation with extrapolation ######
 def esum(series, transform, error=1e-5) -> np.ndarray:
     n0 = 10
     n = n0

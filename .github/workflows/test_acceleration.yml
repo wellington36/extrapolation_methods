@@ -1,4 +1,4 @@
-name: Code Testing Workflow
+name: main code
 
 on:
   push:
