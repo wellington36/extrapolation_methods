@@ -5,4 +5,4 @@
 
 # python scripts
 test_scripts/*
-test.py
+visualization.py
