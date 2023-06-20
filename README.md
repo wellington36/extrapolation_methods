@@ -20,7 +20,7 @@ This repository contains implementations of the following series transformations
 
 ## Usage
 
-In `acceleration.py` we have the transformations implemented above, and for use have the `acceleration` function, that receives on input:
+In `acceleration/esum.py` we have the transformations implemented above, and for use have the `esum` function, that receives on input:
 
 - *A series*: In the form of a function $f: \mathbb{N} \to \mathbb{R}$ returning the terms to be summed.
 - *The Transformation*: "Aitken_tranform", "Richardson_transform", "Epsilon_transform", "G_transform" and "no_transform", the latter being using the initial series without any transformation.
@@ -30,12 +30,12 @@ This function determines the minimum value of n for which, when applying the tra
 
 
 ```python
-from acceleration import *
+from acceleration.esum import *
 import math
 
 # Test with no_transform (without transformation) and with Richardson transformation the basel problem
-n0, no_accelerated = acceleration(lambda x: 1/x**2, no_transform, error=1e-12)
-n1, accelerated = acceleration(lambda x: 1/x**2, Richardson_transform, error=1e-12)
+n0, no_accelerated = esum(lambda x: 1/x**2, no_transform, error=1e-12)
+n1, accelerated = esum(lambda x: 1/x**2, Richardson_transform, error=1e-12)
 
 # Comparison
 print(f"True value:           {math.pi ** 2 / 6}")

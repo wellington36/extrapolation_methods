@@ -1,5 +1,8 @@
 # python log
 /__pycache__/
+/acceleration/__pycache__/
+
+# python scripts
 test.ipynb
 test_scripts/*
 test_github.py
