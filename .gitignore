@@ -1,6 +1,7 @@
 # python log
 /__pycache__/
 /acceleration/__pycache__/
+/.pytest_cache/
 
 # python scripts
 test.ipynb
