@@ -1,5 +1,9 @@
 # python log
 /__pycache__/
-test.ipynb
+/acceleration/__pycache__/
+/.pytest_cache/
+
+# python scripts
 test_scripts/*
-test_github.py
+test.py
+acceleration/emsum.py

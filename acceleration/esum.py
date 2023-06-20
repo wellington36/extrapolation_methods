@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from configuration import *
+from acceleration.configuration import *
 
 
 ###### partial sum ######
@@ -70,8 +70,8 @@ def G_transform(items: np.ndarray) -> np.ndarray:
 
     return acel
 
-###### acceleration ######
-def acceleration(series, transform, error=1e-5) -> np.ndarray:
+###### summation with extrapolation ######
+def esum(series, transform, error=1e-5) -> np.ndarray:
     n0 = 10
     n = n0
     acel = transform(partial_sum(series, n0))
