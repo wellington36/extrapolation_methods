@@ -26,7 +26,7 @@ In `acceleration/esum.py` we have the transformations implemented above, and for
 - *The Transformation*: "Aitken_tranform", "Richardson_transform", "Epsilon_transform", "G_transform" and "no_transform", the latter being using the initial series without any transformation.
 - *The stopping criterion*: In case the difference of the last two values of the series are smaller than a given error.
 
-This function determines the minimum value of n for which, the difference between the last partial sums becomes less than the specified error when applying the transformation. And returns the series applied to the transformation, with precision 'float128' using numpy. If more precision is needed, we have a version of this 'emsum' function in 'acceleration/emsum.py', which uses mpmath to use arbitrary precision (the precision can be modified in the 'acceleration/configuration.py' file). The following is an example:
+This function determines the minimum value of n for which, the difference between the last partial sums becomes less than the specified error when applying the transformation. And returns the series applied to the transformation, with precision `float128` using numpy. If more precision is needed, we have a version of this `emsum` function in `acceleration/emsum.py`, which uses mpmath to use arbitrary precision (the precision can be modified in the `acceleration/configuration.py` file). The following is an example:
 
 
 ```python
