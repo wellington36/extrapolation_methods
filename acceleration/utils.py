@@ -33,13 +33,13 @@ class LogNumber:
         if type(other) == LogNumber:
             return LogNumber(self.sign * other.sign, self.num * other.num)
         else:
-            return LogNumber(self.sign, self.num * log(other))
+            return LogNumber(self.sign, self.num * other)
     
     def __truediv__(self, other):
         if type(other) == LogNumber:
             return LogNumber(self.sign * other.sign, self.num / other.num)
         else:
-            return LogNumber(self.sign, self.num / log(other))
+            return LogNumber(self.sign, self.num / other)
     
     def __pow__(self, other):
         if type(other) == LogNumber:
@@ -63,3 +63,9 @@ def create_lognumber(number):
 
 if __name__ == '__main__':
     print('LogNumber class')
+
+    a = create_lognumber(2)
+    b = a * 2
+
+    print(a.return_value())
+    print(b.return_value())
