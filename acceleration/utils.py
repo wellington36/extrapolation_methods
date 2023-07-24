@@ -103,10 +103,5 @@ def create_lognumber(number):
         return LogNumber(1, log(number))
 
 if __name__ == '__main__':
+    
     print('LogNumber class')
-
-    a = create_lognumber(2)
-    b = a * 2
-
-    print(a.value())
-    print(b.value())
