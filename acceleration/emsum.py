@@ -41,14 +41,6 @@ def Richardson_transform_mp(item: list, p: int = 1) -> list:
     
     return acel
 
-def Epsilon_transform(items: np.ndarray) -> np.ndarray:
-    acel = np.zeros(items.shape[0] - 2, dtype=DT)
-
-    for i in range(items.shape[0] - 2):
-        acel[i] = np.log(items[i+1] + 1/(1/(items[i+2] - items[i+1]) - 1/(items[i+1] - items[i])), dtype=DT)
-
-    return acel
-
 def Epsilon_transform_mp(items: list) -> list:
     acel = [None] * (len(items) - 2)
 

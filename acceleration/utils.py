@@ -46,9 +46,50 @@ class LogNumber:
             return LogNumber(self.sign * other.sign, self.num ** other.num)
         else:
             return LogNumber(self.sign, self.num ** other)
-
     
-    def return_value(self):
+    def __eq__(self, other):
+        if type(other) == LogNumber:
+            return self.sign == other.sign and self.num == other.num
+        else:
+            return self.sign == 1 and self.num == other
+    
+    def __lt__(self, other):
+        if type(other) == LogNumber:
+            if self.sign == other.sign:
+                return self.num < other.num
+            else:
+                return self.sign == -1
+        else:
+            return self.sign == -1
+    
+    def __gt__(self, other):
+        if type(other) == LogNumber:
+            if self.sign == other.sign:
+                return self.num > other.num
+            else:
+                return self.sign == 1
+        else:
+            return self.sign == 1
+    
+    def __le__(self, other):
+        if type(other) == LogNumber:
+            if self.sign == other.sign:
+                return self.num <= other.num
+            else:
+                return self.sign == -1
+        else:
+            return self.sign == -1
+    
+    def __ge__(self, other):
+        if type(other) == LogNumber:
+            if self.sign == other.sign:
+                return self.num >= other.num
+            else:
+                return self.sign == 1
+        else:
+            return self.sign == 1
+
+    def value(self):
         if self.sign == -1:
             return ('-', self.num)
         else:
@@ -67,5 +108,5 @@ if __name__ == '__main__':
     a = create_lognumber(2)
     b = a * 2
 
-    print(a.return_value())
-    print(b.return_value())
+    print(a.value())
+    print(b.value())
