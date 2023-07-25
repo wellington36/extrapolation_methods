@@ -24,9 +24,7 @@ def Aitken_transform_mp(items: list) -> list:
     acel = [None] * (len(items) - 2)
 
     for i in range(len(items) - 2):
-        t0 = items[i] + (items[i+2] - items[i+1] * 2)
-
-        acel[i] = items[i+2] * (items[i])/t0 - items[i+1] * (items[i+1])/t0
+        acel[i] = (items[i] * items[i+2] - items[i+1]**2) / (items[i+2] + (- items[i+1] * 2) + items[i])
     
     return acel
 
@@ -62,9 +60,9 @@ def G_transform_mp(items: list) -> list:
         t1 = (aux[i+2] * aux[i] - (aux[i+1]) ** 2)  * (aux[i+2] - aux[i+1])/t0
 
         if t1 <= 0.005:
-            acel[i] = items[i] - (aux[i+1] - aux[i+2])*(aux[i+1]**2 - aux[i+2]*aux[i])*1/t0
+            acel[i] = items[i] + (aux[i+1] - aux[i+2])*(aux[i+1]**2 - aux[i+2]*aux[i])*(-1)/t0
         else:
-            acel[i] = items[i] - (aux[i+2] - aux[i+1])*aux[i+2]/(aux[i+2] - aux[i+3])
+            acel[i] = items[i] + (aux[i+2] - aux[i+1])*aux[i+2]/(aux[i+2] - aux[i+3])*(-1)
 
     return acel
 

@@ -1,4 +1,4 @@
-from mpmath import mp, log
+from mpmath import mp, log, mpf
 
 class LogNumber:
     def __init__(self, sign, num):
@@ -33,7 +33,10 @@ class LogNumber:
         if type(other) == LogNumber:
             return LogNumber(self.sign * other.sign, self.num * other.num)
         else:
-            return LogNumber(self.sign, self.num * other)
+            if other < 0:
+                return LogNumber(self.sign * -1, self.num * other)
+            else:
+                return LogNumber(self.sign, self.num * other)
     
     def __truediv__(self, other):
         if type(other) == LogNumber:
@@ -41,11 +44,14 @@ class LogNumber:
         else:
             return LogNumber(self.sign, self.num / other)
     
+    def __neg__(self):
+        return LogNumber(self.sign * -1, self.num)
+    
     def __pow__(self, other):
-        if type(other) == LogNumber:
-            return LogNumber(self.sign * other.sign, self.num ** other.num)
+        if type(other) == int:
+            return LogNumber(self.sign ** other, self.num ** other)
         else:
-            return LogNumber(self.sign, self.num ** other)
+            return NameError("Not implemented")
     
     def __eq__(self, other):
         if type(other) == LogNumber:
@@ -105,3 +111,23 @@ def create_lognumber(number):
 if __name__ == '__main__':
     
     print('LogNumber class')
+
+    a = LogNumber(-1, mpf('0.423581381'))
+    b = LogNumber(-1, mpf('0.431631581'))
+    c = LogNumber(-1, mpf('0.438105068'))
+    d = LogNumber(-1, mpf('0.44'))
+
+    print(a.value())
+    print(b.value())
+    print(c.value())
+    print(d.value())
+
+    # t0 = aux[i+3]*aux[i+1] +  aux[i] * aux[i+2] + aux[i+1] * aux[i+2] - aux[i+2]**2 - aux[i+3]*aux[i] - aux[i+1]**2
+
+
+    print((d * b).value())
+    print((a * c).value())
+    print((b * c).value())
+    #print((- ).value())
+    print((a + c).value())
+    print((a + c).value())
