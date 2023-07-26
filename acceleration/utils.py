@@ -11,21 +11,15 @@ class LogNumber:
                 return LogNumber(self.sign, self.num + other.num)
             else:
                 if self.num > other.num:
-                    return LogNumber(self.sign, fabs(other.num - self.num))
+                    return LogNumber(self.sign, self.num - other.num)
                 else:
-                    return LogNumber(other.sign, fabs(self.num - other.num))
+                    return LogNumber(other.sign, other.num - self.num)
         else:
             return LogNumber(self.sign, self.num + other)
     
     def __sub__(self, other):
         if type(other) == LogNumber:
-            if self.sign == other.sign:
-                if self.num > other.num:
-                    return LogNumber(self.sign, self.num - other.num)
-                else:
-                    return LogNumber(other.sign, other.num - self.num)
-            else:
-                return LogNumber(self.sign, self.num + other.num)
+            return LogNumber(self.sign, self.num) + LogNumber(other.sign * -1, other.num)
         else:
             return LogNumber(self.sign, self.num - other)
     
@@ -34,7 +28,7 @@ class LogNumber:
             return LogNumber(self.sign * other.sign, self.num * other.num)
         else:
             if other < 0:
-                return LogNumber(self.sign * -1, self.num * other * -1)
+                return LogNumber(self.sign * -1, self.num * other * (-1))
             else:
                 return LogNumber(self.sign, self.num * other)
     
@@ -42,7 +36,10 @@ class LogNumber:
         if type(other) == LogNumber:
             return LogNumber(self.sign * other.sign, self.num / other.num)
         else:
-            return LogNumber(self.sign, self.num / other)
+            if other < 0:
+                return LogNumber(self.sign * -1, self.num / (other * -1))
+            else:
+                return LogNumber(self.sign, self.num / other)
     
     def __neg__(self):
         return LogNumber(self.sign * -1, self.num)
@@ -124,7 +121,7 @@ if __name__ == '__main__':
     assert a + d == LogNumber(-1, 1)
     assert a + e == LogNumber(1, 4)
 
-    assert a - b == LogNumber(-1, 1)
+    assert a - b == LogNumber(1, 1)
     assert a - c == LogNumber(-1, 0.75)
     assert a - d == LogNumber(-1, 1)
     assert a - e == LogNumber(-1, 6)
@@ -151,3 +148,6 @@ if __name__ == '__main__':
     assert a <= a
     assert b > a
     assert b >= a
+
+    assert (- b * e - e ** 2) == LogNumber(-1, 15)
+    assert (c / e + a ** 2) == LogNumber(1, 0.95)
