@@ -1,4 +1,4 @@
-from mpmath import mp, log, mpf
+from mpmath import log
 
 class LogNumber:
     def __init__(self, sign, num):
@@ -112,22 +112,54 @@ if __name__ == '__main__':
     
     print('LogNumber class')
 
-    a = LogNumber(-1, mpf('0.423581381'))
-    b = LogNumber(-1, mpf('0.431631581'))
-    c = LogNumber(-1, mpf('0.438105068'))
-    d = LogNumber(-1, mpf('0.44'))
+    a = LogNumber(-1, 1)
+    b = LogNumber(-1, 2)
+    c = LogNumber(-1, 0.25)
+    d = LogNumber(1, 0)
+    e = LogNumber(1, 5)
 
     print(a.value())
     print(b.value())
     print(c.value())
     print(d.value())
+    print(e.value())
 
-    # t0 = aux[i+3]*aux[i+1] +  aux[i] * aux[i+2] + aux[i+1] * aux[i+2] - aux[i+2]**2 - aux[i+3]*aux[i] - aux[i+1]**2
-
-
-    print((d * b).value())
-    print((a * c).value())
-    print((b * c).value())
+    #print((d * b).value())
+    #print((a * c).value())
+    #print((b * c).value())
     #print((- ).value())
-    print((a + c).value())
-    print((a + c).value())
+    #print((a + c).value())
+    #print((a + c).value())
+
+    assert a + b == LogNumber(-1, 3)
+    assert a + c == LogNumber(-1, 1.25)
+    assert a + d == LogNumber(-1, 1)
+    assert a + e == LogNumber(1, 4)
+
+    assert a - b == LogNumber(-1, 1)
+    assert a - c == LogNumber(-1, 0.75)
+    assert a - d == LogNumber(-1, 1)
+    assert a - e == LogNumber(-1, 6)
+
+    assert a * b == LogNumber(1, 2)
+    assert a * c == LogNumber(1, 0.25)
+    assert a * d == LogNumber(-1, 0)
+    assert a * e == LogNumber(-1, 5)
+
+    assert a / b == LogNumber(1, 0.5)
+    assert a / c == LogNumber(1, 4)
+    assert a / e == LogNumber(-1, 0.2)
+
+    assert a ** 2 == LogNumber(1, 1)
+    assert a ** 1 == LogNumber(-1, 1)
+    assert a ** 0 == LogNumber(1, 1)
+    assert a ** -1 == LogNumber(-1, 1)
+
+    assert a == LogNumber(-1, 1)
+    assert b == LogNumber(-1, 2)
+
+    assert a < b
+    assert a <= b
+    assert a <= a
+    assert b > a
+    assert b >= a
