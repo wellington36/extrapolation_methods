@@ -1,4 +1,4 @@
-from mpmath import log
+from mpmath import log, fabs
 
 class LogNumber:
     def __init__(self, sign, num):
@@ -11,9 +11,9 @@ class LogNumber:
                 return LogNumber(self.sign, self.num + other.num)
             else:
                 if self.num > other.num:
-                    return LogNumber(self.sign, self.num - other.num)
+                    return LogNumber(self.sign, fabs(other.num - self.num))
                 else:
-                    return LogNumber(other.sign, other.num - self.num)
+                    return LogNumber(other.sign, fabs(self.num - other.num))
         else:
             return LogNumber(self.sign, self.num + other)
     
@@ -34,7 +34,7 @@ class LogNumber:
             return LogNumber(self.sign * other.sign, self.num * other.num)
         else:
             if other < 0:
-                return LogNumber(self.sign * -1, self.num * other)
+                return LogNumber(self.sign * -1, self.num * other * -1)
             else:
                 return LogNumber(self.sign, self.num * other)
     
@@ -118,19 +118,7 @@ if __name__ == '__main__':
     d = LogNumber(1, 0)
     e = LogNumber(1, 5)
 
-    print(a.value())
-    print(b.value())
-    print(c.value())
-    print(d.value())
-    print(e.value())
-
-    #print((d * b).value())
-    #print((a * c).value())
-    #print((b * c).value())
-    #print((- ).value())
-    #print((a + c).value())
-    #print((a + c).value())
-
+    ### Test operators ###
     assert a + b == LogNumber(-1, 3)
     assert a + c == LogNumber(-1, 1.25)
     assert a + d == LogNumber(-1, 1)
