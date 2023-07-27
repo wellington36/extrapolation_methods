@@ -1,4 +1,4 @@
-from mpmath import log, fabs
+from mpmath import log, exp
 
 class LogNumber:
     def __init__(self, sign, num):
@@ -7,13 +7,13 @@ class LogNumber:
     
     def __add__(self, other):
         if type(other) == LogNumber:
-            if self.sign == other.sign:
-                return LogNumber(self.sign, self.num + other.num)
+            max_num = max([self.num, other.num])
+
+            if self.sign == other.sign or self.num == max_num:
+                return LogNumber(self.sign, max_num + log(exp(self.num - max_num) + exp(other.num - max_num)))
             else:
-                if self.num > other.num:
-                    return LogNumber(self.sign, self.num - other.num)
-                else:
-                    return LogNumber(other.sign, other.num - self.num)
+                return LogNumber(other.sign, max_num + log(exp(other.num - max_num) - exp(self.num - max_num)))
+
         else:
             return LogNumber(self.sign, self.num + other)
     
@@ -109,22 +109,32 @@ if __name__ == '__main__':
     
     print('LogNumber class')
 
-    a = LogNumber(-1, 1)
-    b = LogNumber(-1, 2)
-    c = LogNumber(-1, 0.25)
-    d = LogNumber(1, 0)
-    e = LogNumber(1, 5)
+    def equivalence(a, b, epsilon=0.0001):
+        return abs(a - b) < epsilon
+
+    def check_lognumber(a, b):
+        return equivalence(a.value()[1], b.value()[1]) and a.value()[0] == b.value()[0]
+
+    a = create_lognumber(-1)
+    b = create_lognumber(-2)
+    c = create_lognumber(-0.25)
+    d = create_lognumber(1)
+    e = create_lognumber(5)
+
+    ### Debug ###
+    V = a - c
+    print((V).value()[0], exp((V).value()[1]))
 
     ### Test operators ###
-    assert a + b == LogNumber(-1, 3)
-    assert a + c == LogNumber(-1, 1.25)
-    assert a + d == LogNumber(-1, 1)
-    assert a + e == LogNumber(1, 4)
-
-    assert a - b == LogNumber(1, 1)
-    assert a - c == LogNumber(-1, 0.75)
-    assert a - d == LogNumber(-1, 1)
-    assert a - e == LogNumber(-1, 6)
+    assert check_lognumber((a + b), -3)
+    assert check_lognumber((a + c), -1.25)
+    assert check_lognumber((a + d), -2)
+    assert check_lognumber((a + e), 4)
+    
+    assert check_lognumber((a - b), 1)
+    assert check_lognumber((a - c), -0.75)
+    assert check_lognumber((a - d), -2)
+    assert check_lognumber((a - e), -6)
 
     assert a * b == LogNumber(1, 2)
     assert a * c == LogNumber(1, 0.25)
