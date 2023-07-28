@@ -39,7 +39,7 @@ class LogNumber:
     
     def __truediv__(self, other):
         if type(other) == LogNumber:
-            return LogNumber(self.sign * other.sign, self.num / other.num)
+            return LogNumber(self.sign * other.sign, self.num - other.num)
         else:
             if other < 0:
                 return LogNumber(self.sign * -1, self.num / (other * -1))
@@ -51,7 +51,7 @@ class LogNumber:
     
     def __pow__(self, other):
         if type(other) == int:
-            return LogNumber(self.sign ** other, self.num ** other)
+            return LogNumber(self.sign ** other, self.num * other)
         else:
             return NameError("Not implemented")
     
@@ -132,13 +132,6 @@ if __name__ == '__main__':
     d = create_lognumber(0)
     e = create_lognumber(5)
 
-    ### Debug ###
-    V = create_lognumber(0)
-    print((V).value()[0], exp((V).value()[1]))
-
-    V = a * d
-    print((V).value()[0], exp((V).value()[1]))
-
     ### Test operators ###
     assert check_lognumber((a + b), create_lognumber(-3))
     assert check_lognumber((a + c), create_lognumber(-1.25))
@@ -155,17 +148,20 @@ if __name__ == '__main__':
     assert check_lognumber((a * d), create_lognumber(0))
     assert check_lognumber((a * e), create_lognumber(-5))
 
-    assert a / b == LogNumber(1, 0.5)
-    assert a / c == LogNumber(1, 4)
-    assert a / e == LogNumber(-1, 0.2)
+    assert check_lognumber((a / b), create_lognumber(0.5))
+    assert check_lognumber((a / c), create_lognumber(4))
+    assert check_lognumber((a / e), create_lognumber(-0.2))
 
-    assert a ** 2 == LogNumber(1, 1)
-    assert a ** 1 == LogNumber(-1, 1)
-    assert a ** 0 == LogNumber(1, 1)
-    assert a ** -1 == LogNumber(-1, 1)
+    assert check_lognumber((-a), create_lognumber(1))
 
-    assert a == LogNumber(-1, 1)
-    assert b == LogNumber(-1, 2)
+    assert check_lognumber((a ** 2), create_lognumber(1))
+    assert check_lognumber((a ** 1), create_lognumber(-1))
+    assert check_lognumber((a ** 0), create_lognumber(1))
+    assert check_lognumber((a ** -1), create_lognumber(-1))
+
+    ### Test comparison operators ###
+    assert (a == b) == False
+    assert (a == c) == False
 
     assert a < b
     assert a <= b
@@ -173,5 +169,7 @@ if __name__ == '__main__':
     assert b > a
     assert b >= a
 
-    assert (- b * e - e ** 2) == LogNumber(-1, 15)
-    assert (c / e + a ** 2) == LogNumber(1, 0.95)
+    ### Test examples ###
+    assert check_lognumber((- b * e - e ** 2), create_lognumber(-15))
+    assert check_lognumber((a * b * c * d * e), create_lognumber(0))
+    assert check_lognumber((c / e + a ** 2), create_lognumber(0.95))
