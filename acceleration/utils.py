@@ -9,10 +9,15 @@ class LogNumber:
         if type(other) == LogNumber:
             max_num = max([self.num, other.num])
 
-            if self.sign == other.sign or self.num == max_num:
+            if self.sign == other.sign and self.num == max_num:
                 return LogNumber(self.sign, max_num + log(exp(self.num - max_num) + exp(other.num - max_num)))
             else:
-                return LogNumber(other.sign, max_num + log(exp(other.num - max_num) - exp(self.num - max_num)))
+                if self.sign == other.sign:
+                    return LogNumber(other.sign, max_num + log(exp(self.num - max_num) + exp(other.num - max_num)))
+                elif self.num == max_num:
+                    return LogNumber(self.sign, max_num + log(exp(self.num - max_num) - exp(other.num - max_num)))
+                else:
+                    return LogNumber(other.sign, max_num + log(exp(other.num - max_num) - exp(self.num - max_num)))
 
         else:
             return LogNumber(self.sign, self.num + other)
@@ -25,7 +30,7 @@ class LogNumber:
     
     def __mul__(self, other):
         if type(other) == LogNumber:
-            return LogNumber(self.sign * other.sign, self.num * other.num)
+            return LogNumber(self.sign * other.sign, self.num + other.num)
         else:
             if other < 0:
                 return LogNumber(self.sign * -1, self.num * other * (-1))
@@ -110,36 +115,45 @@ if __name__ == '__main__':
     print('LogNumber class')
 
     def equivalence(a, b, epsilon=0.0001):
-        return abs(a - b) < epsilon
-
+        if a == b:
+            return True
+        else:
+            return abs(a - b) < epsilon
+    
     def check_lognumber(a, b):
-        return equivalence(a.value()[1], b.value()[1]) and a.value()[0] == b.value()[0]
+        if equivalence(a.value()[1], b.value()[1]):
+            return equivalence(a.value()[1], create_lognumber(0).value()[1]) or a.value()[0] == b.value()[0]
+        else:
+            return False
 
     a = create_lognumber(-1)
     b = create_lognumber(-2)
     c = create_lognumber(-0.25)
-    d = create_lognumber(1)
+    d = create_lognumber(0)
     e = create_lognumber(5)
 
     ### Debug ###
-    V = a - c
+    V = create_lognumber(0)
+    print((V).value()[0], exp((V).value()[1]))
+
+    V = a * d
     print((V).value()[0], exp((V).value()[1]))
 
     ### Test operators ###
-    assert check_lognumber((a + b), -3)
-    assert check_lognumber((a + c), -1.25)
-    assert check_lognumber((a + d), -2)
-    assert check_lognumber((a + e), 4)
+    assert check_lognumber((a + b), create_lognumber(-3))
+    assert check_lognumber((a + c), create_lognumber(-1.25))
+    assert check_lognumber((a + d), create_lognumber(-1))
+    assert check_lognumber((a + e), create_lognumber(4))
     
-    assert check_lognumber((a - b), 1)
-    assert check_lognumber((a - c), -0.75)
-    assert check_lognumber((a - d), -2)
-    assert check_lognumber((a - e), -6)
+    assert check_lognumber((a - b), create_lognumber(1))
+    assert check_lognumber((a - c), create_lognumber(-0.75))
+    assert check_lognumber((a - d), create_lognumber(-1))
+    assert check_lognumber((a - e), create_lognumber(-6))
 
-    assert a * b == LogNumber(1, 2)
-    assert a * c == LogNumber(1, 0.25)
-    assert a * d == LogNumber(-1, 0)
-    assert a * e == LogNumber(-1, 5)
+    assert check_lognumber((a * b), create_lognumber(2))
+    assert check_lognumber((a * c), create_lognumber(0.25))
+    assert check_lognumber((a * d), create_lognumber(0))
+    assert check_lognumber((a * e), create_lognumber(-5))
 
     assert a / b == LogNumber(1, 0.5)
     assert a / c == LogNumber(1, 4)
