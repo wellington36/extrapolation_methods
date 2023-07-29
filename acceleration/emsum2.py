@@ -20,14 +20,6 @@ def partial_sum_mp(f, n: int) -> list:
 def no_transform_mp(items: list) -> list:
     return items
 
-def Aitken_transform_mp(items: list) -> list:
-    acel = [None] * (len(items) - 2)
-
-    for i in range(len(items) - 2):
-        acel[i] = (items[i] * items[i+2] - items[i+1]**2) / (items[i+2] + (- items[i+1] * 2) + items[i])
-    
-    return acel
-
 def Richardson_transform_mp(item: list, p: int = 1) -> list:
     """Receive a p that represents the power of the Richardson transform"""
     acel = [None] * int(len(item)/2)

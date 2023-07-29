@@ -169,7 +169,19 @@ if __name__ == '__main__':
     assert b > a
     assert b >= a
 
+    ### Test properties ###
+    assert check_lognumber((a + (-a)), create_lognumber(0))
+    assert check_lognumber((a * (a**-1)), create_lognumber(1))
+    assert check_lognumber((b + (-b)), create_lognumber(0))
+    assert check_lognumber((b * (b**-1)), create_lognumber(1))
+    assert check_lognumber((c + (-c)), create_lognumber(0))
+    assert check_lognumber((c * (c**-1)), create_lognumber(1))
+    assert check_lognumber((e + (-e)), create_lognumber(0))
+    assert check_lognumber((e * (e**-1)), create_lognumber(1))
+
     ### Test examples ###
     assert check_lognumber((- b * e - e ** 2), create_lognumber(-15))
     assert check_lognumber((a * b * c * d * e), create_lognumber(0))
     assert check_lognumber((c / e + a ** 2), create_lognumber(0.95))
+    assert check_lognumber((b + (-b)), create_lognumber(0))
+    assert check_lognumber((b * (b**-1)), create_lognumber(1))
