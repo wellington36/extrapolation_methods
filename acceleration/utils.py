@@ -20,31 +20,25 @@ class LogNumber:
                     return LogNumber(other.sign, max_num + log(exp(other.num - max_num) - exp(self.num - max_num)))
 
         else:
-            return LogNumber(self.sign, self.num + other)
+            return LogNumber(self.sign, self.num) + create_lognumber(other)
     
     def __sub__(self, other):
         if type(other) == LogNumber:
             return LogNumber(self.sign, self.num) + LogNumber(other.sign * -1, other.num)
         else:
-            return LogNumber(self.sign, self.num - other)
+            return LogNumber(self.sign, self.num) - create_lognumber(other)
     
     def __mul__(self, other):
         if type(other) == LogNumber:
             return LogNumber(self.sign * other.sign, self.num + other.num)
         else:
-            if other < 0:
-                return LogNumber(self.sign * -1, self.num * other * (-1))
-            else:
-                return LogNumber(self.sign, self.num * other)
+            return LogNumber(self.sign, self.num) * create_lognumber(other)
     
     def __truediv__(self, other):
         if type(other) == LogNumber:
             return LogNumber(self.sign * other.sign, self.num - other.num)
         else:
-            if other < 0:
-                return LogNumber(self.sign * -1, self.num / (other * -1))
-            else:
-                return LogNumber(self.sign, self.num / other)
+            return LogNumber(self.sign, self.num) / create_lognumber(other)
     
     def __neg__(self):
         return LogNumber(self.sign * -1, self.num)
@@ -137,20 +131,32 @@ if __name__ == '__main__':
     assert check_lognumber((a + c), create_lognumber(-1.25))
     assert check_lognumber((a + d), create_lognumber(-1))
     assert check_lognumber((a + e), create_lognumber(4))
+
+    assert check_lognumber((a + 2), create_lognumber(1))
+    assert check_lognumber((a + (-2)), create_lognumber(-3))
     
     assert check_lognumber((a - b), create_lognumber(1))
     assert check_lognumber((a - c), create_lognumber(-0.75))
     assert check_lognumber((a - d), create_lognumber(-1))
     assert check_lognumber((a - e), create_lognumber(-6))
 
+    assert check_lognumber((a - 2), create_lognumber(-3))
+    assert check_lognumber((a - (-2)), create_lognumber(1))
+
     assert check_lognumber((a * b), create_lognumber(2))
     assert check_lognumber((a * c), create_lognumber(0.25))
     assert check_lognumber((a * d), create_lognumber(0))
     assert check_lognumber((a * e), create_lognumber(-5))
 
+    assert check_lognumber((a * 2), create_lognumber(-2))
+    assert check_lognumber((a * (-2)), create_lognumber(2))
+
     assert check_lognumber((a / b), create_lognumber(0.5))
     assert check_lognumber((a / c), create_lognumber(4))
     assert check_lognumber((a / e), create_lognumber(-0.2))
+
+    assert check_lognumber((a / 2), create_lognumber(-0.5))
+    assert check_lognumber((a / (-2)), create_lognumber(0.5))
 
     assert check_lognumber((-a), create_lognumber(1))
 
