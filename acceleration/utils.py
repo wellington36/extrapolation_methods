@@ -127,6 +127,7 @@ if __name__ == '__main__':
     e = create_lognumber(5)
 
     ### Test operators ###
+    ## Addition ##
     assert check_lognumber((a + b), create_lognumber(-3))
     assert check_lognumber((a + c), create_lognumber(-1.25))
     assert check_lognumber((a + d), create_lognumber(-1))
@@ -135,6 +136,7 @@ if __name__ == '__main__':
     assert check_lognumber((a + 2), create_lognumber(1))
     assert check_lognumber((a + (-2)), create_lognumber(-3))
     
+    ## Subtraction ##
     assert check_lognumber((a - b), create_lognumber(1))
     assert check_lognumber((a - c), create_lognumber(-0.75))
     assert check_lognumber((a - d), create_lognumber(-1))
@@ -143,6 +145,7 @@ if __name__ == '__main__':
     assert check_lognumber((a - 2), create_lognumber(-3))
     assert check_lognumber((a - (-2)), create_lognumber(1))
 
+    ## Multiplication ##
     assert check_lognumber((a * b), create_lognumber(2))
     assert check_lognumber((a * c), create_lognumber(0.25))
     assert check_lognumber((a * d), create_lognumber(0))
@@ -151,6 +154,7 @@ if __name__ == '__main__':
     assert check_lognumber((a * 2), create_lognumber(-2))
     assert check_lognumber((a * (-2)), create_lognumber(2))
 
+    ## Division ##
     assert check_lognumber((a / b), create_lognumber(0.5))
     assert check_lognumber((a / c), create_lognumber(4))
     assert check_lognumber((a / e), create_lognumber(-0.2))
@@ -158,8 +162,11 @@ if __name__ == '__main__':
     assert check_lognumber((a / 2), create_lognumber(-0.5))
     assert check_lognumber((a / (-2)), create_lognumber(0.5))
 
+    ## Negation ##
     assert check_lognumber((-a), create_lognumber(1))
+    assert check_lognumber((-e), create_lognumber(-5))
 
+    ## Power ##
     assert check_lognumber((a ** 2), create_lognumber(1))
     assert check_lognumber((a ** 1), create_lognumber(-1))
     assert check_lognumber((a ** 0), create_lognumber(1))
