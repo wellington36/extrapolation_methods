@@ -124,12 +124,12 @@ def test_len_transformations_np():
     assert len(G_transform_np(partial_sum_np(basel_series, 10))) == 7
 
 def test_simple_acceleration_np():
-    n, acel = esum(basel_series, no_transform_np, error=0.1)
+    n, acel = esum(basel_series, "None", error=0.1)
     assert type(n) == int
     assert type(acel) == np.ndarray
     assert len(acel) == n
 
-    n, acel = esum(basel_series, no_transform_np, error=0.01)
+    n, acel = esum(basel_series, "None", error=0.01)
     assert type(n) == int
     assert type(acel) == np.ndarray
     assert len(acel) == n
@@ -140,10 +140,10 @@ def test_partial_sum_mp():
 
     assert type(array) == list
     assert len(array) == 4
-    assert equivalence(array[0], 1)
-    assert equivalence(array[1], 5/4)
-    assert equivalence(array[2], 49/36)
-    assert equivalence(array[3], 205/144)
+    assert equivalence(array[0].exp(), 1)
+    assert equivalence(array[1].exp(), 5/4)
+    assert equivalence(array[2].exp(), 49/36)
+    assert equivalence(array[3].exp(), 205/144)
 
 
 def test_len_transformations_mp():
@@ -154,12 +154,12 @@ def test_len_transformations_mp():
     assert len(G_transform_mp(partial_sum_mp(basel_series, 10))) == 7
 
 def test_simple_acceleration_mp():
-    n, acel = emsum(basel_series, 'None', error=0.1)
+    n, acel = emsum(basel_series, "None", error=0.1)
     assert type(n) == int
     assert type(acel) == list
     assert len(acel) == n
 
-    n, acel = emsum(basel_series, 'None', error=0.01)
+    n, acel = emsum(basel_series, "None", error=0.01)
     assert type(n) == int
     assert type(acel) == list
     assert len(acel) == n
