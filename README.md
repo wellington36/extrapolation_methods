@@ -1,4 +1,10 @@
-# Acceleration algorithms
+Acceleration algorithms
+======
+
+|Build status|
+
+.. |Build status| image:: https://github.com/wellington36/acceleration_algorithms/workflows/test_acceleration/badge.svg
+   :target: https://github.com/wellington36/acceleration_algorithms/actions?workflow=test_acceleration
 
 This repository contains implementations of the following series transformations:
 
