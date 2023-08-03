@@ -91,11 +91,11 @@ class LogNumber:
         else:
             return self.sign == 1
 
+    def exp(self):
+        return self.sign * exp(self.num)
+
     def value(self):
-        if self.sign == -1:
-            return ('-', self.num)
-        else:
-            return ('+', self.num)
+        return (self.sign, self.num)
 
 
 def create_lognumber(number):
@@ -181,6 +181,10 @@ if __name__ == '__main__':
     assert a <= a
     assert b > a
     assert b >= a
+
+    ### Test return number ###
+    assert equivalence(a.exp(), (-1) * exp(log(1)))
+    assert equivalence(e.exp(), (+1) * exp(log(5)))
 
     ### Test properties ###
     assert check_lognumber((a + (-a)), create_lognumber(0))

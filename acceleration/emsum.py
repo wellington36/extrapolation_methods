@@ -1,5 +1,6 @@
 from mpmath import mp, mpf, exp, log, expm1, pi, fabs
 from acceleration.configuration import *
+from acceleration.utils import *
 
 
 ###### partial sum ######
@@ -12,20 +13,20 @@ def partial_sum_mp(f, n: int) -> list:
     for i in range(1, n):
         series[i] = series[i-1] + mpf(f(i+1))
     
-    return series
+    return [create_lognumber(i) for i in series]
 
 
 ###### extrapolation methods ######
 def no_transform_mp(items: list) -> list:
-    return [log(item) for item in items]
+    return items
 
 def Aitken_transform_mp(items: list) -> list:
     acel = [None] * (len(items) - 2)
 
     for i in range(len(items) - 2):
-        t0 = items[i] + (items[i+2] - 2 * items[i+1])
+        t0 = items[i] + (items[i+2] - items[i+1] * 2)
 
-        acel[i] = log(items[i+2] * (items[i])/t0 - items[i+1] * (items[i+1])/t0)
+        acel[i] = items[i+2] * (items[i])/t0 - items[i+1] * (items[i+1])/t0
     
     return acel
 
@@ -34,10 +35,7 @@ def Richardson_transform_mp(item: list, p: int = 1) -> list:
     acel = [None] * int(len(item)/2)
 
     for i in range(int(len(item)/2)):
-        acel[i] = item[2*i] + (item[2*i] - item[i]) / \
-            expm1(p * log(2))
-        
-        acel[i] = log(acel[i])
+        acel[i] = item[2*i] + (item[2*i] - item[i]) / expm1(p * log(2))
     
     return acel
 
@@ -45,7 +43,7 @@ def Epsilon_transform_mp(items: list) -> list:
     acel = [None] * (len(items) - 2)
 
     for i in range(len(items) - 2):
-        acel[i] = log(items[i+1] + 1/(1/(items[i+2] - items[i+1]) - 1/(items[i+1] - items[i])))
+        acel[i] = items[i+1] + ((items[i+2] - items[i+1])**(-1) - (items[i+1] - items[i])**(-1))**(-1)
 
     return acel
 
@@ -64,9 +62,9 @@ def G_transform_mp(items: list) -> list:
         t1 = (aux[i+2] * aux[i] - (aux[i+1]) ** 2)  * (aux[i+2] - aux[i+1])/t0
 
         if t1 <= 0.005:
-            acel[i] = log(items[i] - (aux[i+1] - aux[i+2])*(aux[i+1]**2 - aux[i+2]*aux[i])*1/t0)
+            acel[i] = items[i] - (aux[i+1] - aux[i+2])*(aux[i+1]**2 - aux[i+2]*aux[i])*1/t0
         else:
-            acel[i] = log(items[i] - (aux[i+2] - aux[i+1])*aux[i+2]/(aux[i+2] - aux[i+3]))
+            acel[i] = items[i] - (aux[i+2] - aux[i+1])*aux[i+2]/(aux[i+2] - aux[i+3])
 
     return acel
 
@@ -78,7 +76,7 @@ def emsum(series, transform, error=1e-5):
     acel = transform(partial_sum_mp(series, n0))
     i = -1  # trash
 
-    while fabs(exp(acel[-1]) - exp(acel[-2])) > error:
+    while fabs(exp(acel[-1].value()[1]) - exp(acel[-2].value()[1])) > error:
         i = i + 1
         n = n0 + 2**i
         acel = transform(partial_sum_mp(series, n))
@@ -88,14 +86,14 @@ def emsum(series, transform, error=1e-5):
     while (n > n0):
         acel = transform(partial_sum_mp(series, int((n+n0)/2)))
 
-        if fabs(exp(acel[-1]) - exp(acel[-2])) > error:    # check error
+        if fabs(exp(acel[-1].value()[1]) - exp(acel[-2].value()[1])) > error:    # check error
             n0 = int((n+n0)/2 + 1)
         else:
             n = int((n+n0)/2)
         
     acel = transform(partial_sum_mp(series, n))
 
-    return n, [exp(i) for i in acel]
+    return n, acel
 
 
 if __name__ == "__main__":
