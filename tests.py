@@ -154,12 +154,12 @@ def test_len_transformations_mp():
     assert len(G_transform_mp(partial_sum_mp(basel_series, 10))) == 7
 
 def test_simple_acceleration_mp():
-    n, acel = emsum(basel_series, no_transform_mp, error=0.1)
+    n, acel = emsum(basel_series, 'None', error=0.1)
     assert type(n) == int
     assert type(acel) == list
     assert len(acel) == n
 
-    n, acel = emsum(basel_series, no_transform_mp, error=0.01)
+    n, acel = emsum(basel_series, 'None', error=0.01)
     assert type(n) == int
     assert type(acel) == list
     assert len(acel) == n
