@@ -28,10 +28,10 @@ def partial_sum_list(f, n: int) -> np.ndarray:
 
 
 ###### extrapolation methods ######
-def no_transform_mp(items: list) -> list:
+def no_transform_mp(items: list, lib='mpmath') -> list:
     return items
 
-def Aitken_transform_mp(items: list) -> list:
+def Aitken_transform_mp(items: list, lib='mpmath') -> list:
     acel = [None] * (len(items) - 2)
 
     for i in range(len(items) - 2):
@@ -41,16 +41,19 @@ def Aitken_transform_mp(items: list) -> list:
     
     return acel
 
-def Richardson_transform_mp(item: list, p: int = 1) -> list:
+def Richardson_transform_mp(item: list, p: int = 1, lib='mpmath') -> list:
     """Receive a p that represents the power of the Richardson transform"""
     acel = [None] * int(len(item)/2)
 
     for i in range(int(len(item)/2)):
-        acel[i] = item[2*i] + (item[2*i] - item[i]) / expm1(p * log(2))
+        if lib == 'mpmath':
+            acel[i] = item[2*i] + (item[2*i] - item[i]) / expm1(p * log(2))
+        else:
+            acel[i] = item[2*i] + (item[2*i] - item[i]) / (2**p - 1)
     
     return acel
 
-def Epsilon_transform_mp(items: list) -> list:
+def Epsilon_transform_mp(items: list, lib='mpmath') -> list:
     acel = [None] * (len(items) - 2)
 
     for i in range(len(items) - 2):
@@ -58,7 +61,7 @@ def Epsilon_transform_mp(items: list) -> list:
 
     return acel
 
-def G_transform_mp(items: list) -> list:
+def G_transform_mp(items: list, lib='mpmath') -> list:
     # Initial values
     aux = [None] * len(items)
     acel = [None] * (len(items) - 3)
@@ -81,7 +84,7 @@ def G_transform_mp(items: list) -> list:
 
 
 ###### summation with extrapolation ######
-def acelsum(series, transform, n):
+def acelsum(series, transform, n, precision=53):
     transformation = {'Aitken': Aitken_transform_mp,
                       'Richardson': Richardson_transform_mp,
                       'Epsilon': Epsilon_transform_mp,
@@ -89,14 +92,19 @@ def acelsum(series, transform, n):
                       'None': no_transform_mp}
 
     transform = transformation[transform]
-    acel = transform(partial_sum_mp(series, n))
+
+    if precision == 53:
+        acel = transform(partial_sum_list(series, n), lib='math')
+    else:
+        mp.prec = precision
+        acel = transform(partial_sum_mp(series, n), lib='mpmath')
 
     return acel
 
-def emsum(series, transform, error=1e-5):
+def esum(series, transform, error=1e-5, precision=53):
     n0 = 10
     n = n0
-    acel = acelsum(series, transform, n0)
+    acel = acelsum(series, transform, n0, precision)
     i = -1  # trash
 
     while fabs(exp(acel[-1].value()[1]) - exp(acel[-2].value()[1])) > error:
