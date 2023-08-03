@@ -1,6 +1,7 @@
 from acceleration.esum import esum, no_transform_np, Richardson_transform_np, Aitken_transform_np, Epsilon_transform_np, G_transform_np, partial_sum_np
 from acceleration.emsum import emsum, no_transform_mp, Richardson_transform_mp, Aitken_transform_mp, Epsilon_transform_mp, G_transform_mp, partial_sum_mp
 from acceleration.utils import create_lognumber
+from mpmath import exp, log
 import numpy as np
 
 def basel_series(n: int):
