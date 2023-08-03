@@ -72,6 +72,14 @@ def G_transform_np(items: np.ndarray) -> np.ndarray:
 
 ###### summation with extrapolation ######
 def esum(series, transform, error=1e-5) -> np.ndarray:
+    transformation = {'Aitken': Aitken_transform_np,
+                      'Richardson': Richardson_transform_np,
+                      'Epsilon': Epsilon_transform_np,
+                      'G': G_transform_np,
+                      'None': no_transform_np}
+
+    transform = transformation[transform]
+
     n0 = 10
     n = n0
     acel = transform(partial_sum_np(series, n0))
@@ -106,6 +114,6 @@ def esum(series, transform, error=1e-5) -> np.ndarray:
     return n, np.exp(acel, dtype=DT)
 
 
-if __name__ == "__main__":
-    
-    print("Hello World")
+if __name__ == '__main__':
+    print("This is a module.  Do not run it directly.")
+    exit(1)

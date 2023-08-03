@@ -70,33 +70,44 @@ def G_transform_mp(items: list) -> list:
 
 
 ###### summation with extrapolation ######
+def acelsum(series, transform, n):
+    transformation = {'Aitken': Aitken_transform_mp,
+                      'Richardson': Richardson_transform_mp,
+                      'Epsilon': Epsilon_transform_mp,
+                      'G': G_transform_mp,
+                      'None': no_transform_mp}
+
+    transform = transformation[transform]
+    acel = transform(partial_sum_mp(series, n))
+
+    return acel
+
 def emsum(series, transform, error=1e-5):
     n0 = 10
     n = n0
-    acel = transform(partial_sum_mp(series, n0))
+    acel = acelsum(series, transform, n0)
     i = -1  # trash
 
     while fabs(exp(acel[-1].value()[1]) - exp(acel[-2].value()[1])) > error:
         i = i + 1
         n = n0 + 2**i
-        acel = transform(partial_sum_mp(series, n))
+        acel = acelsum(series, transform, n)
     
     n0 = n0 + 2**(i-1)
 
     while (n > n0):
-        acel = transform(partial_sum_mp(series, int((n+n0)/2)))
+        acel = acelsum(series, transform, int((n+n0)/2))
 
-        if fabs(exp(acel[-1].value()[1]) - exp(acel[-2].value()[1])) > error:    # check error
+        if fabs(exp(acel[-1].value()[1]) - exp(acel[-2].value()[1])) > error:
             n0 = int((n+n0)/2 + 1)
         else:
             n = int((n+n0)/2)
         
-    acel = transform(partial_sum_mp(series, n))
+    acel = acelsum(series, transform, n)
 
     return n, acel
 
-
-if __name__ == "__main__":
-    
-    print("Hello World")
+if __name__ == '__main__':
+    print("This is a module.  Do not run it directly.")
+    exit(1)
     
