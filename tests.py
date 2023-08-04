@@ -1,8 +1,6 @@
-from acceleration.esum import esum, no_transform_np, Richardson_transform_np, Aitken_transform_np, Epsilon_transform_np, G_transform_np, partial_sum_np
-from acceleration.emsum import emsum, no_transform_mp, Richardson_transform_mp, Aitken_transform_mp, Epsilon_transform_mp, G_transform_mp, partial_sum_mp
+from acceleration.esum2 import esum, acelsum, partial_sum_list, partial_sum_mp, no_transform, Aitken_transform, Richardson_transform, Epsilon_transform, G_transform
 from acceleration.utils import create_lognumber
-from mpmath import exp, log
-import numpy as np
+from mpmath import exp, log, mp
 
 def basel_series(n: int):
     return 1/(n)**2
@@ -106,32 +104,32 @@ def test_operations():
 
 #################### TESTS numpy ####################
 
-def test_partial_sum_np():
-    array = partial_sum_np(basel_series, 4)
+def test_partial_sum_list():
+    array = partial_sum_list(basel_series, 4)
 
-    assert type(array) == np.ndarray
+    assert type(array) == list
     assert len(array) == 4
-    assert equivalence(array[0], 1)
-    assert equivalence(array[1], 5/4)
-    assert equivalence(array[2], 49/36)
-    assert equivalence(array[3], 205/144)
+    assert equivalence(array[0].exp(), 1)
+    assert equivalence(array[1].exp(), 5/4)
+    assert equivalence(array[2].exp(), 49/36)
+    assert equivalence(array[3].exp(), 205/144)
 
-def test_len_transformations_np():
-    assert len(no_transform_np(partial_sum_np(basel_series, 10))) == 10
-    assert len(Aitken_transform_np(partial_sum_np(basel_series, 10))) == 8
-    assert len(Richardson_transform_np(partial_sum_np(basel_series, 10))) == 5
-    assert len(Epsilon_transform_np(partial_sum_np(basel_series, 10))) == 8
-    assert len(G_transform_np(partial_sum_np(basel_series, 10))) == 7
+def test_len_transformations_list():
+    assert len(no_transform(partial_sum_list(basel_series, 10), lib='math')) == 10
+    assert len(Aitken_transform(partial_sum_list(basel_series, 10), lib='math')) == 8
+    assert len(Richardson_transform(partial_sum_list(basel_series, 10), lib='math')) == 5
+    assert len(Epsilon_transform(partial_sum_list(basel_series, 10), lib='math')) == 8
+    assert len(G_transform(partial_sum_list(basel_series, 10), lib='math')) == 7
 
-def test_simple_acceleration_np():
+def test_simple_acceleration_list():
     n, acel = esum(basel_series, "None", error=0.1)
     assert type(n) == int
-    assert type(acel) == np.ndarray
+    assert type(acel) == list
     assert len(acel) == n
 
     n, acel = esum(basel_series, "None", error=0.01)
     assert type(n) == int
-    assert type(acel) == np.ndarray
+    assert type(acel) == list
     assert len(acel) == n
 
 #################### TESTS mpmath ####################
@@ -147,28 +145,30 @@ def test_partial_sum_mp():
 
 
 def test_len_transformations_mp():
-    assert len(no_transform_mp(partial_sum_mp(basel_series, 10))) == 10
-    assert len(Aitken_transform_mp(partial_sum_mp(basel_series, 10))) == 8
-    assert len(Richardson_transform_mp(partial_sum_mp(basel_series, 10))) == 5
-    assert len(Epsilon_transform_mp(partial_sum_mp(basel_series, 10))) == 8
-    assert len(G_transform_mp(partial_sum_mp(basel_series, 10))) == 7
+    mp.prec = 100
+
+    assert len(no_transform(partial_sum_mp(basel_series, 10), lib='mpmath')) == 10
+    assert len(Aitken_transform(partial_sum_mp(basel_series, 10), lib='mpmath')) == 8
+    assert len(Richardson_transform(partial_sum_mp(basel_series, 10), lib='mpmath')) == 5
+    assert len(Epsilon_transform(partial_sum_mp(basel_series, 10), lib='mpmath')) == 8
+    assert len(G_transform(partial_sum_mp(basel_series, 10), lib='mpmath')) == 7
 
 def test_simple_acceleration_mp():
-    n, acel = emsum(basel_series, "None", error=0.1)
+    n, acel = esum(basel_series, "None", error=0.1, precision=100)
     assert type(n) == int
     assert type(acel) == list
     assert len(acel) == n
 
-    n, acel = emsum(basel_series, "None", error=0.01)
+    n, acel = esum(basel_series, "None", error=0.01, precision=100)
     assert type(n) == int
     assert type(acel) == list
     assert len(acel) == n
 
 
 if __name__ == '__main__':
-    test_partial_sum_np()
-    test_len_transformations_np()
-    test_simple_acceleration_np()
+    test_partial_sum_list()
+    test_len_transformations_list()
+    test_simple_acceleration_list()
 
     test_partial_sum_mp()
     test_len_transformations_mp()

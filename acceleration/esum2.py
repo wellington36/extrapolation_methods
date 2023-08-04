@@ -28,10 +28,10 @@ def partial_sum_list(f, n: int) -> np.ndarray:
 
 
 ###### extrapolation methods ######
-def no_transform_mp(items: list, lib='mpmath') -> list:
+def no_transform(items: list, lib='mpmath') -> list:
     return items
 
-def Aitken_transform_mp(items: list, lib='mpmath') -> list:
+def Aitken_transform(items: list, lib='mpmath') -> list:
     acel = [None] * (len(items) - 2)
 
     for i in range(len(items) - 2):
@@ -41,7 +41,7 @@ def Aitken_transform_mp(items: list, lib='mpmath') -> list:
     
     return acel
 
-def Richardson_transform_mp(item: list, p: int = 1, lib='mpmath') -> list:
+def Richardson_transform(item: list, p: int = 1, lib='mpmath') -> list:
     """Receive a p that represents the power of the Richardson transform"""
     acel = [None] * int(len(item)/2)
 
@@ -53,7 +53,7 @@ def Richardson_transform_mp(item: list, p: int = 1, lib='mpmath') -> list:
     
     return acel
 
-def Epsilon_transform_mp(items: list, lib='mpmath') -> list:
+def Epsilon_transform(items: list, lib='mpmath') -> list:
     acel = [None] * (len(items) - 2)
 
     for i in range(len(items) - 2):
@@ -61,7 +61,7 @@ def Epsilon_transform_mp(items: list, lib='mpmath') -> list:
 
     return acel
 
-def G_transform_mp(items: list, lib='mpmath') -> list:
+def G_transform(items: list, lib='mpmath') -> list:
     # Initial values
     aux = [None] * len(items)
     acel = [None] * (len(items) - 3)
@@ -85,11 +85,11 @@ def G_transform_mp(items: list, lib='mpmath') -> list:
 
 ###### summation with extrapolation ######
 def acelsum(series, transform, n, precision=53):
-    transformation = {'Aitken': Aitken_transform_mp,
-                      'Richardson': Richardson_transform_mp,
-                      'Epsilon': Epsilon_transform_mp,
-                      'G': G_transform_mp,
-                      'None': no_transform_mp}
+    transformation = {'Aitken': Aitken_transform,
+                      'Richardson': Richardson_transform,
+                      'Epsilon': Epsilon_transform,
+                      'G': G_transform,
+                      'None': no_transform}
 
     transform = transformation[transform]
 
