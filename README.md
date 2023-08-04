@@ -1,4 +1,4 @@
-Acceleration algorithms
+Extrapolation Methods
 ==================
 
 This repository contains implementations of the following series transformations:
