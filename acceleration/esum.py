@@ -1,119 +1,136 @@
-import math
-import numpy as np
+from mpmath import mp, mpf, exp, log, expm1, fabs
 from acceleration.configuration import *
+from acceleration.utils import *
 
 
 ###### partial sum ######
-def partial_sum_np(f, n: int) -> np.ndarray:
+def partial_sum_mp(f, n: int) -> list:
     """Return the partial sum of the series f, up to n terms"""
-    series = np.zeros(n, dtype=DT)
+    series = [None] * n
+
+    series[0] = mpf(f(1))
+
+    for i in range(1, n):
+        series[i] = series[i-1] + mpf(f(i+1))
+    
+    return [create_lognumber(i, lib='mpmath') for i in series]
+
+
+def partial_sum_list(f, n: int) -> np.ndarray:
+    """Return the partial sum of the series f, up to n terms"""
+    series = [None] * n
     series[0] = f(1)
 
     for i in range(1, n):
         series[i] = series[i-1] + f(i+1)
     
-    return series
+    return [create_lognumber(i, lib='math') for i in series]
 
 
 ###### extrapolation methods ######
-def no_transform_np(items: np.ndarray) -> np.ndarray:
-    return np.log(items, dtype=DT)
+def no_transform(items: list, lib='mpmath') -> list:
+    return items
 
-def Aitken_transform_np(items: np.ndarray) -> np.ndarray:
-    acel = np.zeros(items.shape[0] - 2, dtype=DT)
+def Aitken_transform(items: list, lib='mpmath') -> list:
+    acel = [None] * (len(items) - 2)
 
-    for i in range(items.shape[0] - 2):
-        t0 = items[i] + (items[i+2] - 2 * items[i+1])
+    for i in range(len(items) - 2):
+        t0 = items[i] + (items[i+2] - items[i+1] * 2)
 
-        acel[i] = np.log(items[i+2] * (items[i])/t0 - items[i+1] * (items[i+1])/t0, dtype=DT)
+        acel[i] = items[i+2] * (items[i])/t0 - items[i+1] * (items[i+1])/t0
     
     return acel
 
-def Richardson_transform_np(item: np.ndarray, p: int = 1) -> np.ndarray:
+def Richardson_transform(item: list, p: int = 1, lib='mpmath') -> list:
     """Receive a p that represents the power of the Richardson transform"""
-    acel = np.zeros(int(item.shape[0]/2), dtype=DT)
+    acel = [None] * int(len(item)/2)
 
-    for i in range(int(item.shape[0]/2)):
-        acel[i] = item[2*i] + (item[2*i] - item[i]) / \
-            np.expm1(p * math.log(2), dtype=DT)
-        
-        acel[i] = np.log(acel[i], dtype=DT)
+    for i in range(int(len(item)/2)):
+        if lib == 'mpmath':
+            acel[i] = item[2*i] + (item[2*i] - item[i]) / expm1(p * log(2))
+        else:
+            acel[i] = item[2*i] + (item[2*i] - item[i]) / (2**p - 1)
     
     return acel
 
-def Epsilon_transform_np(items: np.ndarray) -> np.ndarray:
-    acel = np.zeros(items.shape[0] - 2, dtype=DT)
+def Epsilon_transform(items: list, lib='mpmath') -> list:
+    acel = [None] * (len(items) - 2)
 
-    for i in range(items.shape[0] - 2):
-        acel[i] = np.log(items[i+1] + 1/(1/(items[i+2] - items[i+1]) - 1/(items[i+1] - items[i])), dtype=DT)
+    for i in range(len(items) - 2):
+        acel[i] = items[i+1] + ((items[i+2] - items[i+1])**(-1) - (items[i+1] - items[i])**(-1))**(-1)
 
     return acel
 
-def G_transform_np(items: np.ndarray) -> np.ndarray:
+def G_transform(items: list, lib='mpmath') -> list:
     # Initial values
-    aux = np.zeros(items.shape[0], dtype=DT)
-    acel = np.zeros(items.shape[0] - 3, dtype=DT)
+    aux = [None] * len(items)
+    acel = [None] * (len(items) - 3)
 
     aux[0] = items[0]
-    for i in range(1, items.shape[0]):
+    for i in range(1, len(items)):
         aux[i] = items[i] - items[i-1]        
     
 
-    for i in range(acel.shape[0]):
+    for i in range(len(acel)):
         t0 = aux[i+3]*aux[i+1] +  aux[i] * aux[i+2] + aux[i+1] * aux[i+2] - aux[i+2]**2 - aux[i+3]*aux[i] - aux[i+1]**2
         t1 = (aux[i+2] * aux[i] - (aux[i+1]) ** 2)  * (aux[i+2] - aux[i+1])/t0
 
         if t1 <= 0.005:
-            acel[i] = np.log(items[i] - (aux[i+1] - aux[i+2])*(aux[i+1]**2 - aux[i+2]*aux[i])*1/t0, dtype=DT)
+            acel[i] = items[i] - (aux[i+1] - aux[i+2])*(aux[i+1]**2 - aux[i+2]*aux[i])*1/t0
         else:
-            acel[i] = np.log(items[i] - (aux[i+2] - aux[i+1])*aux[i+2]/(aux[i+2] - aux[i+3]), dtype=DT)
+            acel[i] = items[i] - (aux[i+2] - aux[i+1])*aux[i+2]/(aux[i+2] - aux[i+3])
 
     return acel
 
+
 ###### summation with extrapolation ######
-def esum(series, transform, error=1e-5) -> np.ndarray:
-    transformation = {'Aitken': Aitken_transform_np,
-                      'Richardson': Richardson_transform_np,
-                      'Epsilon': Epsilon_transform_np,
-                      'G': G_transform_np,
-                      'None': no_transform_np}
+def acelsum(series, transform, n, precision=53):
+    transformation = {'Aitken': Aitken_transform,
+                      'Richardson': Richardson_transform,
+                      'Epsilon': Epsilon_transform,
+                      'G': G_transform,
+                      'None': no_transform}
 
     transform = transformation[transform]
 
+    if precision == 53:
+        acel = transform(partial_sum_list(series, n), lib='math')
+    else:
+        mp.prec = precision
+        acel = transform(partial_sum_mp(series, n), lib='mpmath')
+
+    return acel
+
+def esum(series, transform, error=1e-5, logarithm=False, precision=53):
     n0 = 10
     n = n0
-    acel = transform(partial_sum_np(series, n0))
+    acel = acelsum(series, transform, n0, precision)
     i = -1  # trash
 
-    check = np.array([acel[-1], acel[-2]], dtype=DT)
-    check = np.exp(np.sort(check), dtype=DT)
-
-    while np.sum(np.array([-1, 1]) @ check, dtype=DT) > error: # check error
+    while fabs(exp(acel[-1].value()[1]) - exp(acel[-2].value()[1])) > error:
         i = i + 1
         n = n0 + 2**i
-        acel = transform(partial_sum_np(series, n))
-
-        check = np.array([acel[-1], acel[-2]], dtype=DT)
-        check = np.exp(np.sort(check), dtype=DT)
+        acel = acelsum(series, transform, n)
     
     n0 = n0 + 2**(i-1)
 
     while (n > n0):
-        acel = transform(partial_sum_np(series, int((n+n0)/2)))
+        acel = acelsum(series, transform, int((n+n0)/2))
 
-        check = np.array([acel[-1], acel[-2]], dtype=DT)
-        check = np.exp(np.sort(check), dtype=DT)
-
-        if np.sum(np.array([-1, 1]) @ check, dtype=DT) > error:    # check error
+        if fabs(exp(acel[-1].value()[1]) - exp(acel[-2].value()[1])) > error:
             n0 = int((n+n0)/2 + 1)
         else:
             n = int((n+n0)/2)
         
-    acel = transform(partial_sum_np(series, n))
+    acel = acelsum(series, transform, n)
 
-    return n, np.exp(acel, dtype=DT)
+    if logarithm:
+        return n, acel
+    
+    return n, [i.exp(precision) for i in acel]
 
 
 if __name__ == '__main__':
     print("This is a module.  Do not run it directly.")
     exit(1)
+    

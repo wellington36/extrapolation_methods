@@ -1,4 +1,4 @@
-from acceleration.esum2 import esum, acelsum, partial_sum_list, partial_sum_mp, no_transform, Aitken_transform, Richardson_transform, Epsilon_transform, G_transform
+from acceleration.esum import esum, acelsum, partial_sum_list, partial_sum_mp, no_transform, Aitken_transform, Richardson_transform, Epsilon_transform, G_transform
 from acceleration.utils import create_lognumber
 from mpmath import exp, log, mp
 
