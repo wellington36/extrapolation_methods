@@ -5,7 +5,7 @@ DESCRIPTION = 'Acceleration methods to real series'
 
 # Setting up
 setup(
-    name="acceleration2",
+    name="extrapolation",
     version=VERSION,
     author="Wellington Silva",
     author_email="<wellington.71319@gmail.com>",

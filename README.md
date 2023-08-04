@@ -24,12 +24,12 @@ This repository contains implementations of the following series transformations
 To install the package, run the following command:
 
 ```bash
-pip install acceleration
+pip install extrapolation
 ```
 
 ## Usage
 
-In `acceleration/esum.py` we have the transformations implemented above, and for use have the `esum` and `acelsum` function.
+We have the transformations implemented above, and for use have the `esum` and `acelsum` function.
 
 ### esum
 The `esum` receives on input:

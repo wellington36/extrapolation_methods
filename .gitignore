@@ -1,6 +1,6 @@
 # python log
 /__pycache__/
-/acceleration/__pycache__/
+/extrapolation/__pycache__/
 /.pytest_cache/
 
 # python scripts
