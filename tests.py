@@ -1,5 +1,5 @@
-from acceleration2.esum import esum, acelsum, partial_sum_list, partial_sum_mp, no_transform, Aitken_transform, Richardson_transform, Epsilon_transform, G_transform
-from acceleration2.utils import create_lognumber
+from extrapolation.esum import esum, acelsum, partial_sum_list, partial_sum_mp, no_transform, Aitken_transform, Richardson_transform, Epsilon_transform, G_transform
+from extrapolation.utils import create_lognumber
 from mpmath import exp, log, mp
 
 def basel_series(n: int):
