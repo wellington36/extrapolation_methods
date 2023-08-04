@@ -1,10 +1,7 @@
 from setuptools import setup, find_packages
-import codecs
-import os
 
 VERSION = '2.0.0'
 DESCRIPTION = 'Acceleration methods to real series'
-LONG_DESCRIPTION = 'A package that allows to build simple streams of video, audio and camera data.'
 
 # Setting up
 setup(

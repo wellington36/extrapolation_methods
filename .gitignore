@@ -6,3 +6,8 @@
 # python scripts
 test_scripts/*
 visualization*.py
+
+# pypi files
+dist/
+build/
+*.egg-info/

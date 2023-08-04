@@ -83,7 +83,7 @@ def G_transform(items: list, lib='mpmath') -> list:
 
 
 ###### summation with extrapolation ######
-def acelsum(series, transform, n, precision=53):
+def acelsum(series, transform, n, logarithm=True, precision=53):
     transformation = {'Aitken': Aitken_transform,
                       'Richardson': Richardson_transform,
                       'Epsilon': Epsilon_transform,
@@ -98,7 +98,10 @@ def acelsum(series, transform, n, precision=53):
         mp.prec = precision
         acel = transform(partial_sum_mp(series, n), lib='mpmath')
 
-    return acel
+    if logarithm:
+        return acel
+    
+    return [i.exp(precision) for i in acel]
 
 def esum(series, transform, error=1e-5, logarithm=False, precision=53):
     n0 = 10
