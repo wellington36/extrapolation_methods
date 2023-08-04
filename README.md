@@ -44,7 +44,8 @@ This function determines the minimum value of n for which, the difference betwee
 
 
 ```python
-from acceleration.esum import *
+from extrapolation import esum
+import math
 
 # Test with no_transform (without transformation) and with Richardson transformation the basel problem
 n0, no_accelerated = esum(lambda x: 1/x**2, 'None', error=1e-12, logarithm=False, precision=100)
@@ -75,11 +76,12 @@ We have also the `acelsum` function, that receives on input:
 This function calculates partial sums up to a given natural value, returning the result in log-scale or normal by applying a chosen transformation. The following is an example:
 
 ```python
-from acceleration.esum import *
+from extrapolation import acelsum
+import math
 
 # Test with no_transform (without transformation) and with Richardson transformation the basel problem
 no_accelerated = acelsum(lambda x: 1/x**2, 'None', n=1000, logarithm=False, precision=100)
-accelerated = esum(lambda x: 1/x**2, 'Richardson', n=1000, logarithm=False, precision=100)
+accelerated = acelsum(lambda x: 1/x**2, 'Richardson', n=1000, logarithm=False, precision=100)
 
 # Comparison
 print(f"True value:           {math.pi ** 2 / 6}")
