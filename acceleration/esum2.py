@@ -101,7 +101,7 @@ def acelsum(series, transform, n, precision=53):
 
     return acel
 
-def esum(series, transform, error=1e-5, precision=53):
+def esum(series, transform, error=1e-5, logarithm=False, precision=53):
     n0 = 10
     n = n0
     acel = acelsum(series, transform, n0, precision)
@@ -124,7 +124,11 @@ def esum(series, transform, error=1e-5, precision=53):
         
     acel = acelsum(series, transform, n)
 
-    return n, acel
+    if logarithm:
+        return n, acel
+    
+    return n, [i.exp(precision) for i in acel]
+
 
 if __name__ == '__main__':
     print("This is a module.  Do not run it directly.")

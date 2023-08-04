@@ -1,4 +1,4 @@
-from mpmath import log, exp
+from mpmath import log, exp, mp
 import math
 
 class LogNumber:
@@ -92,8 +92,12 @@ class LogNumber:
         else:
             return self.sign == 1
 
-    def exp(self):
-        return self.sign * exp(self.num)
+    def exp(self, precision=53):
+        if precision != 53:
+            mp.prec = precision
+            return self.sign * exp(self.num)
+        else:
+            return self.sign * math.exp(self.num)
 
     def value(self):
         return (self.sign, self.num)
