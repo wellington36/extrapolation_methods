@@ -1,5 +1,5 @@
 from mpmath import mp, mpf, exp, log, expm1, fabs
-from acceleration.utils import *
+from acceleration2.utils import *
 
 
 ###### partial sum ######

@@ -19,6 +19,14 @@ This repository contains implementations of the following series transformations
   - Transform: O($n$)
   - To find n: O($2n\log n$)
 
+## Installation
+
+To install the package, run the following command:
+
+```bash
+pip install acceleration
+```
+
 ## Usage
 
 In `acceleration/esum.py` we have the transformations implemented above, and for use have the `esum` and `acelsum` function.

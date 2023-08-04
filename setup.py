@@ -5,7 +5,7 @@ DESCRIPTION = 'Acceleration methods to real series'
 
 # Setting up
 setup(
-    name="acceleration",
+    name="acceleration2",
     version=VERSION,
     author="Wellington Silva",
     author_email="<wellington.71319@gmail.com>",
@@ -14,6 +14,5 @@ setup(
     long_description=open('README.md').read(),
     license='MIT',
     packages=find_packages(),
-    install_requires=open('requirements.txt').read(),
     keywords=['python', 'extrapolation', 'numerical-analysis']
 )

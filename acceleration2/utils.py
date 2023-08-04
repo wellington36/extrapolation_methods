@@ -95,6 +95,7 @@ class LogNumber:
     def exp(self, precision=53):
         if precision != 53:
             mp.prec = precision
+            
             return self.sign * exp(self.num)
         else:
             return self.sign * math.exp(self.num)
