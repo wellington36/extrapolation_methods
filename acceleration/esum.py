@@ -1,5 +1,4 @@
 from mpmath import mp, mpf, exp, log, expm1, fabs
-from acceleration.configuration import *
 from acceleration.utils import *
 
 
@@ -16,7 +15,7 @@ def partial_sum_mp(f, n: int) -> list:
     return [create_lognumber(i, lib='mpmath') for i in series]
 
 
-def partial_sum_list(f, n: int) -> np.ndarray:
+def partial_sum_list(f, n: int) -> list:
     """Return the partial sum of the series f, up to n terms"""
     series = [None] * n
     series[0] = f(1)
