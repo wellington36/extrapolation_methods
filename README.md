@@ -1,7 +1,7 @@
 Acceleration algorithms
 ==================
 
-Let be $S_n = \sum_{i=1}^n a_i$ a sequence of parcial sums. This repository contains implementations of the following series transformations, which generate a new sequence $T_n$:
+Let be $S_n = \sum^{n}\_{i=1} a_i$ a sequence of parcial sums. This repository contains implementations of the following series transformations, which generate a new sequence $T\_n$:
 
 * [Aitken's transformation (or delta-squared process)](https://en.wikipedia.org/wiki/Aitken%27s_delta-squared_process):
   - In `esum`: O($2n\log n$)
@@ -38,18 +38,17 @@ Let be $S_n = \sum_{i=1}^n a_i$ a sequence of parcial sums. This repository cont
 
   Let be two auxiliary sequences $s_j^{(n)}$ and $r_j^{(n)}$ defined by:
 
-  $$s^{(n)}_0 = 1,\ r^{(n)}_1 = x_n,\ n=0,1,\ldots,$$
+  $$s^{(n)}\_0 = 1,\ r^{(n)}\_1 = x\_n,\ n=0,1,\ldots,$$
 
   inductively:
 
-  $$s^{(n)}_{k+1} = s^{(n+1)}_{k} ( \frac{r^{(n+1)}_{k+1}}{r^{(n)}_{k+1}} - 1),\ k,n = 0,1,\ldots$$
+  $$s^{(n)}\_{k+1} = s^{(n+1)}\_{k} \left( \frac{r^{(n+1)}\_{k+1}}{r^{(n)}\_{k+1}} - 1 \right),\ k,n = 0,1,\ldots$$
   
   and
 
+  $$r^{(n)}\_{k+1} = r^{(n+1)}\_{k} \left( \frac{s^{(n+1)}\_{k}}{s^{(n)}\_{k}} - 1 \right),\ k=1,2,\ldots;\ n=0,1,\ldots$$
 
-  $$r^{(n)}_{k+1} = r^{(n+1)}_{k} \left( \frac{s^{(n+1)}_{k}}{s^{(n)}_{k}} - 1 \right),\ k=1,2,\ldots;\ n=0,1,\ldots$$
-
-  Then, $T_n = S_n - \frac{S_{n+1} - S_{n}}{r^{(n+1)}_{1} - r^{(n)}_{1}} r^{(n)}_{1}$.
+  Then, $T_n = S_n - \frac{S\_{n+1} - S\_{n}}{r^{(n+1)}\_{1} - r^{(n)}\_{1}} r^{(n)}\_{1}$.
 
 ## Installation
 
