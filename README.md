@@ -53,6 +53,12 @@ Let be $`S_n = {\sum}^{n}_{i=1} a_i`$ a sequence of parcial sums. This repositor
 
 ## Installation
 
+Make sure you have the mpmath library installed:
+
+```
+pip install mpmath
+```
+
 To install the package, run the following command:
 
 ```bash
