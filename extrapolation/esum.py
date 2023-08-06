@@ -101,7 +101,19 @@ def G_transform(items: list, lib='mpmath') -> list:
 
 
 ###### summation with extrapolation ######
-def acelsum(series, transform, n, logarithm=True, precision=53):
+def acelsum(series, transform: str, n: int, logarithm=True, precision=53):
+    """Evaluates partial sums up to n terms using a given transformation.
+
+    Args:
+        series (function): The function that generates a series
+        transform (str): An extrapolation method
+        n (int): Number of terms to evaluate
+        logarithm (bool, optional): The return is in Log-Scale?. Defaults to True.
+        precision (int, optional): Precision in mpmath (or 53 to python default). Defaults to 53.
+
+    Returns:
+        list: Sequence of accelerated partial sums.
+    """    
     transformation = {'Aitken': Aitken_transform,
                       'Richardson': Richardson_transform,
                       'Epsilon': Epsilon_transform,
@@ -121,7 +133,21 @@ def acelsum(series, transform, n, logarithm=True, precision=53):
     
     return [i.exp(precision) for i in acel]
 
-def esum(series, transform, error=1e-5, logarithm=False, precision=53):
+def esum(series, transform, error=1e-5, logarithm=False, precision=53) -> tuple:
+    """Given the function that generates the terms of a series, an extrapolation
+        method and an error. Finds the smallest value of n such that it achieves
+        the given error using the given method.
+
+    Args:
+        series (_type_): _description_
+        transform (_type_): _description_
+        error (_type_, optional): _description_. Defaults to 1e-5.
+        logarithm (bool, optional): _description_. Defaults to False.
+        precision (int, optional): _description_. Defaults to 53.
+
+    Returns:
+        int, list: The best n and the sequence of accelerated partial sums.
+    """    
     n0 = 10
     n = n0
     acel = acelsum(series, transform, n0, precision)
