@@ -89,13 +89,16 @@ def G_transform(items: list, lib='mpmath') -> list:
     
 
     for i in range(len(acel)):
-        t0 = aux[i+3]*aux[i+1] +  aux[i] * aux[i+2] + aux[i+1] * aux[i+2] - aux[i+2]**2 - aux[i+3]*aux[i] - aux[i+1]**2
+        t0 = aux[i+3] * aux[i+1] +  aux[i] * aux[i+2] + aux[i+1] * aux[i+2] - \
+            aux[i+2]**2 - aux[i+3] * aux[i] - aux[i+1]**2
         t1 = (aux[i+2] * aux[i] - (aux[i+1]) ** 2)  * (aux[i+2] - aux[i+1])/t0
 
         if t1 <= 0.005:
-            acel[i] = items[i] - (aux[i+1] - aux[i+2])*(aux[i+1]**2 - aux[i+2]*aux[i])*1/t0
+            acel[i] = items[i] - (aux[i+1] - aux[i+2]) * \
+                (aux[i+1]**2 - aux[i+2]*aux[i])*1/t0
         else:
-            acel[i] = items[i] - (aux[i+2] - aux[i+1])*aux[i+2]/(aux[i+2] - aux[i+3])
+            acel[i] = items[i] - (aux[i+2] - aux[i+1]) * aux[i+2] / \
+                (aux[i+2] - aux[i+3])
 
     return acel
 
@@ -108,8 +111,8 @@ def acelsum(series, transform: str, n: int, logarithm=True, precision=53):
         series (function): The function that generates a series
         transform (str): An extrapolation method
         n (int): Number of terms to evaluate
-        logarithm (bool, optional): The return is in Log-Scale?. Defaults to True.
-        precision (int, optional): Precision in mpmath (or 53 to python default). Defaults to 53.
+        logarithm (bool): The return is in Log-Scale?. Defaults to True.
+        precision (int): Precision in mpmath (or 53 to python default).
 
     Returns:
         list: Sequence of accelerated partial sums.
