@@ -1,7 +1,7 @@
 Acceleration algorithms
 ==================
 
-Let be $`S_n = {\sum}^{n}_{i=1} a_i`$ a sequence of parcial sums. This repository contains implementations of the following series transformations, which generate a new sequence $`T\_n`$:
+Let be $`S_n = {\sum}^{n}_{i=1} a_i`$ a sequence of parcial sums. This repository contains implementations of the following series transformations, which generate a new sequence $`T_n`$:
 
 
 * [Aitken's transformation (or delta-squared process)](https://en.wikipedia.org/wiki/Aitken%27s_delta-squared_process):
