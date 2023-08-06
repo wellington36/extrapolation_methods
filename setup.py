@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '2.0.0'
+VERSION = '2.0.2'
 DESCRIPTION = 'Acceleration methods to real series'
 
 # Setting up
@@ -12,7 +12,9 @@ setup(
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
     long_description=open('README.md').read(),
+    url="https://github.com/wellington36/extrapolation_methods",
     license='MIT',
     packages=find_packages(),
+    install_requires=['mpmath'],
     keywords=['python', 'extrapolation', 'numerical-analysis']
 )

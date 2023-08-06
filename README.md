@@ -1,7 +1,7 @@
 Extrapolation Methods
 ==================
 
-Let be $`S_n = {\sum}^{n}_{i=1} a_i`$ a sequence of parcial sums. This repository contains implementations of the following series transformations, which generate a new sequence $`T_n`$:
+Let be $S_n = {\sum}^{n}_{i=1} a_i$ a sequence of partial sums. This repository contains implementations of the following series transformations, which generate a new sequence $T\_n$:
 
 
 * [Aitken's transformation (or delta-squared process)](https://en.wikipedia.org/wiki/Aitken%27s_delta-squared_process):
@@ -49,7 +49,7 @@ Let be $`S_n = {\sum}^{n}_{i=1} a_i`$ a sequence of parcial sums. This repositor
 
   $$r^{(n)}\_{k+1} = r^{(n+1)}\_{k} \left( \frac{s^{(n+1)}\_{k}}{s^{(n)}\_{k}} - 1 \right),\ k=1,2,\ldots;\ n=0,1,\ldots$$
 
-  Then, $`T_n = S_n - \frac{S_{n+1} - S_{n}}{r^{(n+1)}_{1} - r^{(n)}_{1}} r^{(n)}_{1}`$.
+  Then, $T_n = S_n - \frac{S_{n+1} - S_{n}}{r^{(n+1)}_{1} - r^{(n)}_{1}} r^{(n)}_{1}$.
 
 ## Installation
 
