@@ -104,23 +104,36 @@ def G_transform(items: list, lib='mpmath') -> list:
 
 
 def W_transform(items: list, lib='mpmath') -> list:
-    def g(n):   # t-transform
-        if n == 0:
-            return items[0]
-        return items[n] - items[n-1]
-    
-    k = 1   # one step
-    b = 1   # following Sidi
-    
-    acel = [None] * (len(items) - 1)
-    N = [items[n]/g(n) for n in range(len(items))]
-    D = [create_lognumber(1)/g(n) for n in range(len(items))]
+    aux = [None] * len(items)
 
-    for i in range(len(items) - 1):
-        N[i] = N[i+1] - N[i] * (i + k + b) * (i + k + b - 1) / ((i + 2*k + b) * (i + 2*k + b - 1))
-        D[i] = D[i+1] - D[i] * (i + k + b) * (i + k + b - 1) / ((i + 2*k + b) * (i + 2*k + b - 1))
-        
-        acel[i] = N[i] / D[i]
+    aux[0] = items[0]
+    for k in range(1, len(items)):
+        aux[k] = items[k] - items[k-1]
+
+    def g(n):   # t-transform
+        return aux[n]
+
+    #def g(n):   # u-transform
+    #    return aux[n] * (n + 1)
+
+    #def g(n):   # v-transform
+    #    return (aux[n] * aux[n+1]) / (aux[n+1] - aux[n])
+    
+    acel = [None] * (len(items) - 2)
+
+    M = [items[n]/g(n) for n in range(len(items) - 1)]
+    N = [create_lognumber(1)/g(n) for n in range(len(items) - 1)]
+    aux = [None] * len(items)
+
+    aux[0] = items[0]
+    for k in range(1, len(items)):
+        aux[k] = items[k] - items[k-1]
+
+    for i in range(len(items) - 2):
+        M[i] = (M[i+1] - M[i]) / (aux[i+1]**(-1) - aux[i]**(-1))
+        N[i] = (N[i+1] - N[i]) / (aux[i+1]**(-1) - aux[i]**(-1))
+
+        acel[i] = M[i] / N[i]
 
     return acel
 
