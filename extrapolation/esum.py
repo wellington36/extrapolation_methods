@@ -117,7 +117,7 @@ def W_transform(items: list, lib='mpmath') -> list:
     #    return aux[n] * (n + 1)
 
     #def g(n):   # v-transform
-    #    return (aux[n] * aux[n+1]) / (aux[n+1] - aux[n])
+    #    return (aux[n] * aux[n+1]) / (aux[n] - aux[n+1])
     
     acel = [None] * (len(items) - 2)
 
