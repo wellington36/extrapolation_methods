@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 VERSION = '2.0.2'
-DESCRIPTION = 'Acceleration methods to real series'
+DESCRIPTION = 'Extrapolation methods to real series'
 
 # Setting up
 setup(
@@ -16,5 +16,5 @@ setup(
     license='MIT',
     packages=find_packages(),
     install_requires=['mpmath'],
-    keywords=['python', 'extrapolation', 'numerical-analysis']
+    keywords=['python', 'series', 'extrapolation', 'numerical-analysis']
 )
