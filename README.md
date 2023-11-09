@@ -77,7 +77,7 @@ Let be $S_n = {\sum}^{n}_{i=1} a_i$ a sequence of partial sums. This repository 
   - **u-variant**: $g(n) = n a_n$;
   - **v-variant**: $g(n) = a_n a_{n+1} / (a_{n+1} - a_n)$.
  
-  Then, $T\_n = \frac{M\_n^{(0)}}{N\_n^{(0)}}$.
+  Then, $T\_n = \frac{M\_n^{(1)}}{N\_n^{(1)}}$.
 
 
 ## Installation
