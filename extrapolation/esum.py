@@ -103,6 +103,53 @@ def G_transform(items: list, lib='mpmath') -> list:
     return acel
 
 
+def Levin_transform(variant: str, items: list, lib='mpmath') -> list:
+    aux = [None] * len(items)
+
+    aux[0] = items[0]
+    for k in range(1, len(items)):
+        aux[k] = items[k] - items[k-1]
+
+    if variant == 't':
+        def g(n):   # t-transform
+            return aux[n]
+    
+    elif variant == 'u':
+        def g(n):   # u-transform
+            return aux[n] * (n + 1)
+    
+    else:
+        def g(n):   # v-transform
+            return (aux[n] * aux[n+1]) / (aux[n] - aux[n+1])
+    
+    acel = [None] * (len(items) - 2)
+
+    M = [items[n]/g(n) for n in range(len(items) - 1)]
+    N = [create_lognumber(1)/g(n) for n in range(len(items) - 1)]
+    aux = [None] * len(items)
+
+    aux[0] = items[0]
+    for k in range(1, len(items)):
+        aux[k] = items[k] - items[k-1]
+
+    for i in range(len(items) - 2):
+        M[i] = (M[i+1] - M[i]) / (aux[i+1]**(-1) - aux[i]**(-1))
+        N[i] = (N[i+1] - N[i]) / (aux[i+1]**(-1) - aux[i]**(-1))
+
+        acel[i] = M[i] / N[i]
+
+    return acel
+
+def Levin_t_transform(items: list, lib='mpmath'):
+    return Levin_transform('t', items, lib)
+
+def Levin_u_transform(items: list, lib='mpmath'):
+    return Levin_transform('u', items, lib)
+
+def Levin_v_transform(items: list, lib='mpmath'):
+    return Levin_transform('v', items, lib)
+
+
 ###### summation with extrapolation ######
 def acelsum(series, transform: str, n: int, logarithm=True, precision=53):
     """Evaluates partial sums up to n terms using a given transformation.
@@ -121,6 +168,9 @@ def acelsum(series, transform: str, n: int, logarithm=True, precision=53):
                       'Richardson': Richardson_transform,
                       'Epsilon': Epsilon_transform,
                       'G': G_transform,
+                      'Levin-t': Levin_t_transform,
+                      'Levin-u': Levin_u_transform,
+                      'Levin-v': Levin_v_transform,
                       'None': no_transform}
 
     transform = transformation[transform]
