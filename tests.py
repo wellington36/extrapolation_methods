@@ -140,12 +140,12 @@ def test_len_transformations_list():
     assert len(Levin_v_transform(partial_sum_list(basel_series, 10), lib='math')) == 8
 
 def test_simple_acceleration_list():
-    n, acel = esum(basel_series, "None", error=0.1, precision=100)
+    n, acel = esum(basel_series, "None", error=0.1)
     assert type(n) == int
     assert type(acel) == list
     assert len(acel) == n
 
-    n, acel = esum(basel_series, "Aitken", error=0.01, precision=100)
+    n, acel = esum(basel_series, "Aitken", error=0.01)
     assert type(n) == int
     assert type(acel) == list
     assert len(acel) == n-2
@@ -195,14 +195,14 @@ def test_simple_acceleration_mp():
     assert type(acel) == list
     assert len(acel) == n-2
 
-    acel = acelsum(basel_series, "None", n=10, logarithm=False)
+    acel = acelsum(basel_series, "None", n=10, logarithm=False, precision=100)
     assert type(acel) == list
-    assert type(acel[-1]) == float
+    assert type(acel[-1]) == mp.mpf
     assert len(acel) == 10
 
-    acel = acelsum(basel_series, "Aitken", n=10, logarithm=False)
+    acel = acelsum(basel_series, "Aitken", n=10, logarithm=False, precision=100)
     assert type(acel) == list
-    assert type(acel[-1]) == float
+    assert type(acel[-1]) == mp.mpf
     assert len(acel) == 8
 
 
