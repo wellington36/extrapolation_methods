@@ -49,7 +49,36 @@ Let be $S_n = {\sum}^{n}_{i=1} a_i$ a sequence of partial sums. This repository 
 
   $$r^{(n)}\_{k+1} = r^{(n+1)}\_{k} \left( \frac{s^{(n+1)}\_{k}}{s^{(n)}\_{k}} - 1 \right),\ k=1,2,\ldots;\ n=0,1,\ldots$$
 
-  Then, $T_n = S_n - \frac{S_{n+1} - S_{n}}{r^{(n+1)}_{1} - r^{(n)}_{1}} r^{(n)}_{1}$.
+  Then, $T\_n = S\_n - \frac{S\_{n+1} - S\_{n}}{r^{(n+1)}\_{1} - r^{(n)}\_{1}} r^{(n)}\_{1}$.
+
+* [Levin transformation](https://www.cambridge.org/core/books/abs/practical-extrapolation-methods/gtransformation-and-its-generalizations/B3A1C6628B6C3E6438C943E25FFA621D):
+  - In `esum`: O($4n\log n$)
+  - In `acelsum`: O($2n$)
+
+  This method is defined by
+
+  $$W_n^{(k)} = \frac{M_n^{(k)}}{N_n^{(k)}}$$
+
+  where
+
+  $$M_n^{(0)} = \frac{S_n}{g(n)},$$
+
+  $$M_{n}^{(k+1)} = \frac{M_{n+1}^{(k)} - M_{n}^{(k)}}{a_{n + k}^{-1} - a_{n + 1}^{-1}},$$
+
+  and
+
+  $$N_n^{(0)} = \frac{1}{g(n)},$$
+
+  $$N_{n}^{(k+1)} = \frac{N_{n+1}^{(k)} - N_{n}^{(k)}}{a_{n + k}^{-1} - a_{n + 1}^{-1}}.$$
+
+  For the function $g(n)$, we have some classic choices for this function:
+
+  - **t-variant**: $g(n) = a_{n+1}$;
+  - **u-variant**: $g(n) = n a_n$;
+  - **v-variant**: $g(n) = a_n a_{n+1} / (a_{n+1} - a_n)$.
+ 
+  Then, $T\_n = \frac{M\_n^{(0)}}{N\_n^{(0)}}$.
+
 
 ## Installation
 
@@ -73,7 +102,7 @@ We have the transformations implemented above, and for use have the `esum` and `
 The `esum` receives on input:
 
 - *A series*: In the form of a function $f: \mathbb{N} \to \mathbb{R}$ returning the terms to be summed.
-- *The Transformation*: "Aitken", "Richardson", "Epsilon", "G" and "None", the latter being using the initial series without any transformation.
+- *The Transformation*: "Aitken", "Richardson", "Epsilon", "G", "Levin-t", "Levin-u", "Levin-v" and "None", the latter being using the initial series without any transformation.
 - *The stopping criterion*: In case the difference of the last two values of the series are smaller than a given error.
 - *Return in logarithm scale*: True if you want to receive the return in logarithm scale with the sign and False if you want to receive in normal scale.
 - *Precision*: If precision is 53 we use the default python precision, otherwise the given bits precision.
@@ -106,7 +135,7 @@ With acceleration:    1.6449340611256049164589309217, with 22896 iterations
 We have also the `acelsum` function, that receives on input:
 
 - *A series*: In the form of a function $f: \mathbb{N} \to \mathbb{R}$ returning the terms to be summed.
-- *The Transformation*: "Aitken", "Richardson", "Epsilon", "G" and "None", the latter being using the initial series without any transformation.
+- *The Transformation*: "Aitken", "Richardson", "Epsilon", "G", "Levin-t", "Levin-u", "Levin-v" and "None", the latter being using the initial series without any transformation.
 - *Natural n*: Number of values to be summed.
 - *Return in logarithm scale*: True if you want to receive the return in logarithm scale with the sign and False if you want to receive in normal scale.
 - *Precision*: If precision is 53 we use the default python precision, otherwise the given bits precision.
