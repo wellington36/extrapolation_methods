@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '2.0.2'
+VERSION = '2.1.0'
 DESCRIPTION = 'Extrapolation methods to real series'
 
 # Setting up
