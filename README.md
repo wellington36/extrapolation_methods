@@ -51,7 +51,7 @@ Let be $S_n = {\sum}^{n}_{i=1} a_i$ a sequence of partial sums. This repository 
 
   Then, $T\_n = S\_n - \frac{S\_{n+1} - S\_{n}}{r^{(n+1)}\_{1} - r^{(n)}\_{1}} r^{(n)}\_{1}$.
 
-* [Levin transformation](https://www.cambridge.org/core/books/abs/practical-extrapolation-methods/gtransformation-and-its-generalizations/B3A1C6628B6C3E6438C943E25FFA621D):
+* [Levin transformation](https://epubs.siam.org/doi/abs/10.1137/0716017):
   - In `esum`: O($4n\log n$)
   - In `acelsum`: O($2n$)
 
