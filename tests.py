@@ -1,7 +1,22 @@
-from extrapolation.esum import esum, acelsum, partial_sum_list, partial_sum_mp, no_transform, Aitken_transform, Richardson_transform, Epsilon_transform, G_transform
+from extrapolation.esum import (
+    esum,
+    acelsum,
+    partial_sum_list,
+    partial_sum_mp,
+    no_transform,
+    Aitken_transform,
+    Richardson_transform,
+    Epsilon_transform,
+    G_transform,
+    Levin_t_transform,
+    Levin_u_transform,
+    Levin_v_transform
+)
 from extrapolation.utils import create_lognumber
 from mpmath import exp, log, mp
 
+
+#################### Auxiliar function ####################
 def basel_series(n: int):
     return 1/(n)**2
 
@@ -102,7 +117,7 @@ def test_operations():
     assert check_lognumber((b + (-b)), create_lognumber(0))
     assert check_lognumber((b * (b**-1)), create_lognumber(1))
 
-#################### TESTS numpy ####################
+#################### TESTS lists ####################
 
 def test_partial_sum_list():
     array = partial_sum_list(basel_series, 4)
@@ -120,17 +135,30 @@ def test_len_transformations_list():
     assert len(Richardson_transform(partial_sum_list(basel_series, 10), lib='math')) == 5
     assert len(Epsilon_transform(partial_sum_list(basel_series, 10), lib='math')) == 8
     assert len(G_transform(partial_sum_list(basel_series, 10), lib='math')) == 7
+    assert len(Levin_t_transform(partial_sum_list(basel_series, 10), lib='math')) == 8
+    assert len(Levin_u_transform(partial_sum_list(basel_series, 10), lib='math')) == 8
+    assert len(Levin_v_transform(partial_sum_list(basel_series, 10), lib='math')) == 8
 
 def test_simple_acceleration_list():
-    n, acel = esum(basel_series, "None", error=0.1)
+    n, acel = esum(basel_series, "None", error=0.1, precision=100)
     assert type(n) == int
     assert type(acel) == list
     assert len(acel) == n
 
-    n, acel = esum(basel_series, "None", error=0.01)
+    n, acel = esum(basel_series, "Aitken", error=0.01, precision=100)
     assert type(n) == int
     assert type(acel) == list
-    assert len(acel) == n
+    assert len(acel) == n-2
+
+    acel = acelsum(basel_series, "None", n=10, logarithm=False)
+    assert type(acel) == list
+    assert type(acel[-1]) == float
+    assert len(acel) == 10
+
+    acel = acelsum(basel_series, "Aitken", n=10, logarithm=False)
+    assert type(acel) == list
+    assert type(acel[-1]) == float
+    assert len(acel) == 8
 
 #################### TESTS mpmath ####################
 def test_partial_sum_mp():
@@ -152,6 +180,9 @@ def test_len_transformations_mp():
     assert len(Richardson_transform(partial_sum_mp(basel_series, 10), lib='mpmath')) == 5
     assert len(Epsilon_transform(partial_sum_mp(basel_series, 10), lib='mpmath')) == 8
     assert len(G_transform(partial_sum_mp(basel_series, 10), lib='mpmath')) == 7
+    assert len(Levin_t_transform(partial_sum_list(basel_series, 10), lib='math')) == 8
+    assert len(Levin_u_transform(partial_sum_list(basel_series, 10), lib='math')) == 8
+    assert len(Levin_v_transform(partial_sum_list(basel_series, 10), lib='math')) == 8
 
 def test_simple_acceleration_mp():
     n, acel = esum(basel_series, "None", error=0.1, precision=100)
@@ -159,11 +190,42 @@ def test_simple_acceleration_mp():
     assert type(acel) == list
     assert len(acel) == n
 
-    n, acel = esum(basel_series, "None", error=0.01, precision=100)
+    n, acel = esum(basel_series, "Aitken", error=0.01, precision=100)
     assert type(n) == int
     assert type(acel) == list
-    assert len(acel) == n
+    assert len(acel) == n-2
 
+    acel = acelsum(basel_series, "None", n=10, logarithm=False)
+    assert type(acel) == list
+    assert type(acel[-1]) == float
+    assert len(acel) == 10
+
+    acel = acelsum(basel_series, "Aitken", n=10, logarithm=False)
+    assert type(acel) == list
+    assert type(acel[-1]) == float
+    assert len(acel) == 8
+
+
+#################### TESTS transformations in acelsum and esum ####################
+def test_transformation_in_acelsum():
+    assert type(acelsum(basel_series, "None", n=10)) == list
+    assert type(acelsum(basel_series, "Aitken", n=10)) == list
+    assert type(acelsum(basel_series, "Richardson", n=10)) == list
+    assert type(acelsum(basel_series, "Epsilon", n=10)) == list
+    assert type(acelsum(basel_series, "G", n=10)) == list
+    assert type(acelsum(basel_series, "Levin-t", n=10)) == list
+    assert type(acelsum(basel_series, "Levin-u", n=10)) == list
+    assert type(acelsum(basel_series, "Levin-v", n=10)) == list
+
+def test_transformation_in_esum():
+    assert type(esum(basel_series, "None", error=0.1)) == tuple
+    assert type(esum(basel_series, "Aitken", error=0.1)) == tuple
+    assert type(esum(basel_series, "Richardson", error=0.1)) == tuple
+    assert type(esum(basel_series, "Epsilon", error=0.1)) == tuple
+    assert type(esum(basel_series, "G", error=0.1)) == tuple
+    assert type(esum(basel_series, "Levin-t", error=0.1)) == tuple
+    assert type(esum(basel_series, "Levin-u", error=0.1)) == tuple
+    assert type(esum(basel_series, "Levin-v", error=0.1)) == tuple
 
 if __name__ == '__main__':
     test_partial_sum_list()
@@ -173,3 +235,6 @@ if __name__ == '__main__':
     test_partial_sum_mp()
     test_len_transformations_mp()
     test_simple_acceleration_mp()
+
+    test_transformation_in_acelsum()
+    test_transformation_in_esum()
