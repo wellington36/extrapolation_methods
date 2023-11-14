@@ -127,8 +127,8 @@ print(f"With acceleration:    {accelerated[-1]}, with {n1} iterations")
 Out:
 ```
 True value:           1.6449340668482264
-Without acceleration: 1.6449330668607708753650232828, with 1000012 iterations
-With acceleration:    1.6449340611256049164589309217, with 22896 iterations
+Without acceleration: 1.6449330668487264267523920296, with 1000000 iterations
+With acceleration:    1.6449340611255960068665838135, with 22896 iterations
 ```
 
 ### acelsum
