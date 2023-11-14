@@ -151,7 +151,7 @@ def Levin_v_transform(items: list, lib='mpmath'):
 
 
 ###### summation with extrapolation ######
-def acelsum(series, transform: str, n: int, logarithm=True, precision=53):
+def acelsum(series, transform: str, n: int, logarithm=False, precision=53):
     """Evaluates partial sums up to n terms using a given transformation.
 
     Args:
@@ -203,25 +203,25 @@ def esum(series, transform, error=1e-5, logarithm=False, precision=53) -> tuple:
     """    
     n0 = 10
     n = n0
-    acel = acelsum(series, transform, n0, precision)
+    acel = acelsum(series, transform, n0, logarithm=True, precision=precision)
     i = -1  # trash
 
     while fabs(exp(acel[-1].value()[1]) - exp(acel[-2].value()[1])) > error:
         i = i + 1
         n = n0 + 2**i
-        acel = acelsum(series, transform, n)
+        acel = acelsum(series, transform, n, logarithm=True, precision=precision)
     
     n0 = n0 + 2**(i-1)
 
     while (n > n0):
-        acel = acelsum(series, transform, int((n+n0)/2))
+        acel = acelsum(series, transform, int((n+n0)/2), logarithm=True, precision=precision)
 
         if fabs(exp(acel[-1].value()[1]) - exp(acel[-2].value()[1])) > error:
             n0 = int((n+n0)/2 + 1)
         else:
             n = int((n+n0)/2)
         
-    acel = acelsum(series, transform, n)
+    acel = acelsum(series, transform, n, logarithm=True, precision=precision)
 
     if logarithm:
         return n, acel
