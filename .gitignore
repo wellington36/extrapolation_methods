@@ -6,6 +6,7 @@
 # python scripts
 scripts/*
 visualization*.py
+tcc_results.py
 
 # pypi files
 dist/
